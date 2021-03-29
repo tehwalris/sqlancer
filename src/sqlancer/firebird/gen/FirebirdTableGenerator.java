@@ -2,6 +2,7 @@ package sqlancer.firebird.gen;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import sqlancer.Randomly;
 import sqlancer.common.query.ExpectedErrors;
@@ -30,7 +31,12 @@ public class FirebirdTableGenerator {
             sb.append(columns.get(i).getType());
 
             if (globalState.getDmbsSpecificOptions().testIndexes && Randomly.getBooleanWithRatherLowProbability()) {
-                sb.append(" UNIQUE");
+                errors.add("Attempt to define a second PRIMARY KEY for the same table");
+                if (Randomly.getBoolean()) {
+                    sb.append(" UNIQUE");
+                } else {
+                    sb.append(" PRIMARY KEY");
+                }
             }
             if (globalState.getDmbsSpecificOptions().testNotNullConstraints
                     && Randomly.getBooleanWithRatherLowProbability()) {
@@ -39,6 +45,13 @@ public class FirebirdTableGenerator {
 
             // TODO: add collate, check, default
 
+        }
+        if (globalState.getDmbsSpecificOptions().testIndexes && Randomly.getBoolean()) {
+            errors.add("Attempt to define a second PRIMARY KEY for the same table");
+            List<FirebirdColumn> primaryKeyColumns = Randomly.nonEmptySubset(columns);
+            sb.append(", PRIMARY KEY(");
+            sb.append(primaryKeyColumns.stream().map(c -> c.getName()).collect(Collectors.joining(", ")));
+            sb.append(")");
         }
 
         sb.append(")");

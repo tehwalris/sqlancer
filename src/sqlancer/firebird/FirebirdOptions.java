@@ -18,11 +18,11 @@ public class FirebirdOptions implements DBMSSpecificOptions<FirebirdOracleFactor
 
     // TODO: add options here
 
-    @Parameter(names = "--test-not-null", description = "Allow generating NOT NULL constraints in tables", arity = 1)
-    public boolean testNotNullConstraints = true;
-
     @Parameter(names = "--test-indexes", description = "Allow explicit (i.e. CREATE INDEX) and implicit (i.e., UNIQUE and PRIMARY KEY) indexes", arity = 1)
     public boolean testIndexes = true;
+
+    @Parameter(names = "--test-not-null", description = "Allow generating NOT NULL constraints in tables", arity = 1)
+    public boolean testNotNullConstraints = true;
 
     @Parameter(names = "--max-num-deletes", description = "The maximum number of DELETE statements that are issued for a database", arity = 1)
     public int maxNumDeletes = 1;
