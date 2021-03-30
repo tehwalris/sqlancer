@@ -266,6 +266,16 @@
       <artifactId>h2</artifactId>
       <version>1.4.200</version>
     </dependency>
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
+      <version>5.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.firebirdsql.jdbc</groupId>
+      <artifactId>jaybird</artifactId>
+      <version>3.0.5</version>
+    </dependency>
   </dependencies>
   <reporting>
     <plugins>

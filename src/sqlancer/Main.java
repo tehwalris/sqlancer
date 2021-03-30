@@ -28,6 +28,7 @@ import sqlancer.common.log.Loggable;
 import sqlancer.common.query.Query;
 import sqlancer.common.query.SQLancerResultSet;
 import sqlancer.duckdb.DuckDBProvider;
+import sqlancer.firebird.FirebirdProvider;
 import sqlancer.h2.H2Provider;
 import sqlancer.mariadb.MariaDBProvider;
 import sqlancer.mysql.MySQLProvider;
@@ -554,6 +555,7 @@ public final class Main {
         providers.add(new ClickHouseProvider());
         providers.add(new DuckDBProvider());
         providers.add(new H2Provider());
+        providers.add(new FirebirdProvider());
         return providers;
     }
 

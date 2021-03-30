@@ -18,6 +18,12 @@ public class FirebirdOptions implements DBMSSpecificOptions<FirebirdOracleFactor
 
     // TODO: add options here
 
+    @Parameter(names = "--host", description = "Specifies the host for connecting to the Firebird Server", arity = 1)
+    public String host = "localhost";
+
+    @Parameter(names = "--port", description = "Specifies the port for connecting to the Firebird Server", arity = 1)
+    public int port = 3050;
+
     @Parameter(names = "--test-indexes", description = "Allow explicit (i.e. CREATE INDEX) and implicit (i.e., UNIQUE and PRIMARY KEY) indexes", arity = 1)
     public boolean testIndexes = true;
 

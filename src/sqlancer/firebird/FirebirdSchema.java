@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import sqlancer.Randomly;
 import sqlancer.SQLConnection;
@@ -22,7 +23,7 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
     // Boolean is only supported for Firebird version 3.0 and later
     public enum FirebirdDataType {
 
-        INTEGER, VARCHAR, FLOAT, BOOLEAN, TIMESTAMP, DATE, BLOB;
+        INTEGER, FLOAT, BOOLEAN, TIMESTAMP, DATE;
 
         public static FirebirdDataType getRandom() {
             return Randomly.fromOptions(values());
@@ -67,34 +68,27 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
         return new FirebirdTables(Randomly.nonEmptySubset(getDatabaseTables()));
     }
 
-    private static FirebirdDataType getColumnType(String typeString) {
+    private static FirebirdDataType getColumnType(String typeCode) {
         FirebirdDataType columnType;
-        switch (typeString) {
-        case "INTEGER":
-        case "INT":
+        switch (typeCode) {
+        case "8": // INTEGER
             columnType = FirebirdDataType.INTEGER;
             break;
-        case "VARCHAR":
-            columnType = FirebirdDataType.VARCHAR;
-            break;
-        case "FLOAT":
-        case "DOUBLE PRECISION":
+        case "10": // FLOAT
+        case "27": // DOUBLE PRECISION
             columnType = FirebirdDataType.FLOAT;
             break;
-        case "BOOLEAN":
+        case "23": // BOOLEAN
             columnType = FirebirdDataType.BOOLEAN;
             break;
-        case "TIMESTAMP":
+        case "35": // TIMESTAMP
             columnType = FirebirdDataType.TIMESTAMP;
             break;
-        case "DATE":
+        case "12": // DATE
             columnType = FirebirdDataType.DATE;
             break;
-        case "BLOB":
-            columnType = FirebirdDataType.BLOB;
-            break;
         default:
-            throw new AssertionError(typeString);
+            throw new AssertionError(typeCode);
         }
 
         return columnType;
@@ -123,6 +117,7 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
             throws SQLException {
         List<FirebirdTable> databaseTables = new ArrayList<>();
         for (String tableName : tableNames) {
+            System.out.println("Table name: " + tableName);
             List<FirebirdColumn> databaseColumns = getTableColumns(con, tableName);
             FirebirdTable t = new FirebirdTable(tableName, databaseColumns, isView);
             for (FirebirdColumn c : databaseColumns) {
@@ -174,7 +169,7 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
                 while (rs.next()) {
                     String columnName = rs.getString("RDB$FIELD_NAME");
                     String dataType = rs.getString("RDB$FIELD_TYPE");
-                    boolean isNullable = rs.getString("RDB$NULL_FLAG").contentEquals("NULL");
+                    boolean isNullable = Objects.equals(rs.getString("RDB$NULL_FLAG"), "null");
                     boolean isPrimaryKey = primaryKeys.contains(columnName);
                     FirebirdColumn c = new FirebirdColumn(columnName, getColumnType(dataType), isPrimaryKey,
                             isNullable);
