@@ -37,7 +37,7 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
         private final boolean isNullable;
 
         public FirebirdColumn(String name, FirebirdDataType columnType, boolean isPrimaryKey, boolean isNullable) {
-            super(name, null, columnType);
+            super(name.replaceAll("\\s+", ""), null, columnType);
             this.isPrimaryKey = isPrimaryKey;
             this.isNullable = isNullable;
         }
@@ -97,7 +97,7 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
     public static class FirebirdTable extends AbstractRelationalTable<FirebirdColumn, TableIndex, FirebirdGlobalState> {
 
         public FirebirdTable(String tableName, List<FirebirdColumn> columns, boolean isView) {
-            super(tableName, columns, Collections.emptyList(), isView);
+            super(tableName.replaceAll("\\s+", ""), columns, Collections.emptyList(), isView);
         }
 
     }
@@ -169,7 +169,7 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
                     String columnName = rs.getString("RDB$FIELD_NAME");
                     String dataType = rs.getString("RDB$FIELD_TYPE");
                     boolean isNullable = Objects.equals(rs.getString("RDB$NULL_FLAG"), "null");
-                    boolean isPrimaryKey = primaryKeys.contains(columnName);
+                    boolean isPrimaryKey = primaryKeys.contains(columnName.replaceAll("\\s+", ""));
                     FirebirdColumn c = new FirebirdColumn(columnName, getColumnType(dataType), isPrimaryKey,
                             isNullable);
                     columns.add(c);
@@ -190,7 +190,7 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
                     + "' AND constr.RDB$CONSTRAINT_TYPE = 'PRIMARY KEY';")) {
 
                 while (rs.next()) {
-                    primaryKeys.add(rs.getString("RDB$FIELD_NAME"));
+                    primaryKeys.add(rs.getString("RDB$FIELD_NAME").replaceAll("\\s+", ""));
                 }
             }
         }
