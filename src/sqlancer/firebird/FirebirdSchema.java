@@ -117,7 +117,6 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
             throws SQLException {
         List<FirebirdTable> databaseTables = new ArrayList<>();
         for (String tableName : tableNames) {
-            System.out.println("Table name: " + tableName);
             List<FirebirdColumn> databaseColumns = getTableColumns(con, tableName);
             FirebirdTable t = new FirebirdTable(tableName, databaseColumns, isView);
             for (FirebirdColumn c : databaseColumns) {
