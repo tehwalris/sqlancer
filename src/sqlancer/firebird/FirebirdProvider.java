@@ -1,6 +1,5 @@
 package sqlancer.firebird;
 
-import java.io.File;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -16,6 +15,7 @@ import sqlancer.StatementExecutor;
 import sqlancer.common.query.SQLQueryAdapter;
 import sqlancer.common.query.SQLQueryProvider;
 import sqlancer.firebird.FirebirdProvider.FirebirdGlobalState;
+import sqlancer.firebird.gen.FirebirdInsertGenerator;
 import sqlancer.firebird.gen.FirebirdTableGenerator;
 
 public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, FirebirdOptions> {
@@ -25,7 +25,7 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
     }
 
     public enum Action implements AbstractAction<FirebirdGlobalState> {
-        INSERT(null), //
+        INSERT(FirebirdInsertGenerator::getQuery), //
         CREATE_INDEX(null), //
         DELETE(null), //
         UPDATE(null), //
@@ -50,7 +50,8 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
             return rand.getInteger(0, globalState.getOptions().getMaxNumberInserts() + 1);
         case CREATE_INDEX:
             return globalState.getDmbsSpecificOptions().testIndexes
-                    ? rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumIndexes + 1) : 0;
+                    ? rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumIndexes + 1)
+                    : 0;
         case DELETE:
             return rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumDeletes + 1);
         case UPDATE:

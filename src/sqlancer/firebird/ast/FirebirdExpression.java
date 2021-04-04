@@ -1,5 +1,5 @@
 package sqlancer.firebird.ast;
 
-public class FirebirdExpression {
+public interface FirebirdExpression {
 
 }
