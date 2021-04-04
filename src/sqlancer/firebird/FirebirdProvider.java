@@ -90,28 +90,23 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
 
     @Override
     public SQLConnection createDatabase(FirebirdGlobalState globalState) throws Exception {
-        File dir = new File("." + File.separator + "databases");
-        if (!dir.exists()) {
-            dir.mkdir();
-        }
         String databaseName = globalState.getDatabaseName();
         String username = "SYSDBA";
         String password = "masterkey";
         String host = globalState.getDmbsSpecificOptions().host;
         int port = globalState.getDmbsSpecificOptions().port;
-        File dataBase = new File(dir, databaseName + ".fdb");
 
         FBManager manager = new FBManager();
         manager.setUserName(username);
         manager.setPassword(password);
         manager.start();
-        if (manager.isDatabaseExists(dataBase.getAbsolutePath(), username, password)) {
-            manager.dropDatabase(dataBase.getAbsolutePath(), username, password);
+        if (manager.isDatabaseExists(databaseName, username, password)) {
+            manager.dropDatabase(databaseName, username, password);
         }
-        manager.createDatabase(dataBase.getAbsolutePath(), username, password);
+        manager.createDatabase(databaseName, username, password);
         manager.stop();
 
-        String url = String.format("jdbc:firebirdsql://%s:%d/%s?charSet=utf-8", host, port, dataBase.getAbsolutePath());
+        String url = String.format("jdbc:firebirdsql://%s:%d/%s?charSet=utf-8", host, port, databaseName);
         return new SQLConnection(DriverManager.getConnection(url, username, password));
     }
 
