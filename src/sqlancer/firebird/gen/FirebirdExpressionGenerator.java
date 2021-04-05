@@ -73,6 +73,12 @@ public final class FirebirdExpressionGenerator
       return FirebirdConstant.createIntConstant(r.getInteger());
     case FLOAT:
       return FirebirdConstant.createFloatConstant(r.getDouble());
+    case BOOLEAN:
+      return FirebirdConstant.createBooleanConstant(Randomly.getBoolean());
+    case TIMESTAMP:
+      return FirebirdConstant.createTimestampConstant(r.getInteger());
+    case DATE:
+      return FirebirdConstant.createDateConstant(r.getInteger());
     default:
       throw new AssertionError(type);
     }
