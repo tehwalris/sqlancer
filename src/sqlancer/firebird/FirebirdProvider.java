@@ -25,11 +25,7 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
     }
 
     public enum Action implements AbstractAction<FirebirdGlobalState> {
-        INSERT(FirebirdInsertGenerator::getQuery), //
-        CREATE_INDEX(null), //
-        DELETE(null), //
-        UPDATE(null), //
-        CREATE_VIEW(null);
+        INSERT(FirebirdInsertGenerator::getQuery);
 
         private final SQLQueryProvider<FirebirdGlobalState> sqlQueryProvider;
 
@@ -48,16 +44,6 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
         switch (action) {
         case INSERT:
             return rand.getInteger(0, globalState.getOptions().getMaxNumberInserts() + 1);
-        case CREATE_INDEX:
-            return globalState.getDmbsSpecificOptions().testIndexes
-                    ? rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumIndexes + 1)
-                    : 0;
-        case DELETE:
-            return rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumDeletes + 1);
-        case UPDATE:
-            return rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumUpdates + 1);
-        case CREATE_VIEW:
-            return rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumViews + 1);
         default:
             throw new AssertionError(action);
         }
