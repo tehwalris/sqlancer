@@ -12,6 +12,7 @@ import sqlancer.OracleFactory;
 import sqlancer.common.oracle.TestOracle;
 import sqlancer.firebird.FirebirdOptions.FirebirdOracleFactory;
 import sqlancer.firebird.FirebirdProvider.FirebirdGlobalState;
+import sqlancer.firebird.test.FirebirdDummyOracle;
 
 @Parameters
 public class FirebirdOptions implements DBMSSpecificOptions<FirebirdOracleFactory> {
@@ -54,7 +55,7 @@ public class FirebirdOptions implements DBMSSpecificOptions<FirebirdOracleFactor
         DUMMY {
             @Override
             public TestOracle create(FirebirdGlobalState globalState) throws SQLException {
-                return null;
+                return new FirebirdDummyOracle();
             }
         };
 
