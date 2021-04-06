@@ -15,6 +15,7 @@ import sqlancer.StatementExecutor;
 import sqlancer.common.query.SQLQueryAdapter;
 import sqlancer.common.query.SQLQueryProvider;
 import sqlancer.firebird.FirebirdProvider.FirebirdGlobalState;
+import sqlancer.firebird.gen.FirebirdDeleteGenerator;
 import sqlancer.firebird.gen.FirebirdIndexGenerator;
 import sqlancer.firebird.gen.FirebirdInsertGenerator;
 import sqlancer.firebird.gen.FirebirdTableGenerator;
@@ -27,7 +28,8 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
 
     public enum Action implements AbstractAction<FirebirdGlobalState> {
         INSERT(FirebirdInsertGenerator::getQuery), //
-        CREATE_INDEX(FirebirdIndexGenerator::getQuery);
+        CREATE_INDEX(FirebirdIndexGenerator::getQuery), //
+        DELETE(FirebirdDeleteGenerator::getQuery);
 
         private final SQLQueryProvider<FirebirdGlobalState> sqlQueryProvider;
 
@@ -49,6 +51,8 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
         case CREATE_INDEX:
             return globalState.getDmbsSpecificOptions().testIndexes
                     ? rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumIndexes + 1) : 0;
+        case DELETE:
+            return rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumDeletes + 1);
         default:
             throw new AssertionError(action);
         }

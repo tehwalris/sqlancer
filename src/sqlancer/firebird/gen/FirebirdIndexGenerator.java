@@ -5,6 +5,7 @@ import java.util.List;
 import sqlancer.Randomly;
 import sqlancer.common.query.ExpectedErrors;
 import sqlancer.common.query.SQLQueryAdapter;
+import sqlancer.firebird.FirebirdErrors;
 import sqlancer.firebird.FirebirdProvider.FirebirdGlobalState;
 import sqlancer.firebird.FirebirdSchema.FirebirdColumn;
 import sqlancer.firebird.FirebirdSchema.FirebirdTable;
@@ -39,6 +40,7 @@ public final class FirebirdIndexGenerator {
             sb.append(columns.get(i).getName());
         }
         sb.append(")");
+        FirebirdErrors.addIndexErrors(errors);
         return new SQLQueryAdapter(sb.toString(), errors, true);
     }
 
