@@ -101,7 +101,7 @@ public class AbstractSchema<G extends GlobalState<?, ?, ?>, A extends AbstractTa
             String indexName = String.format("i%d", i++);
             boolean indexNameFound = false;
             for (A table : databaseTables) {
-                if (table.getIndexes().stream().anyMatch(ind -> ind.getIndexName().contentEquals(indexName))) {
+                if (table.getIndexes().stream().anyMatch(ind -> ind.getIndexName().equalsIgnoreCase(indexName))) {
                     indexNameFound = true;
                     break;
                 }

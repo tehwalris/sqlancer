@@ -15,6 +15,7 @@ import sqlancer.StatementExecutor;
 import sqlancer.common.query.SQLQueryAdapter;
 import sqlancer.common.query.SQLQueryProvider;
 import sqlancer.firebird.FirebirdProvider.FirebirdGlobalState;
+import sqlancer.firebird.gen.FirebirdIndexGenerator;
 import sqlancer.firebird.gen.FirebirdInsertGenerator;
 import sqlancer.firebird.gen.FirebirdTableGenerator;
 
@@ -25,7 +26,8 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
     }
 
     public enum Action implements AbstractAction<FirebirdGlobalState> {
-        INSERT(FirebirdInsertGenerator::getQuery);
+        INSERT(FirebirdInsertGenerator::getQuery), //
+        CREATE_INDEX(FirebirdIndexGenerator::getQuery);
 
         private final SQLQueryProvider<FirebirdGlobalState> sqlQueryProvider;
 
@@ -44,6 +46,9 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
         switch (action) {
         case INSERT:
             return rand.getInteger(0, globalState.getOptions().getMaxNumberInserts() + 1);
+        case CREATE_INDEX:
+            return globalState.getDmbsSpecificOptions().testIndexes
+                    ? rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumIndexes + 1) : 0;
         default:
             throw new AssertionError(action);
         }

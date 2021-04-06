@@ -32,7 +32,6 @@ public class FirebirdTableGenerator {
             sb.append(columns.get(i).getType());
 
             if (globalState.getDmbsSpecificOptions().testIndexes && Randomly.getBooleanWithRatherLowProbability()) {
-                errors.add("Attempt to define a second PRIMARY KEY for the same table");
                 if (Randomly.getBoolean()) {
                     sb.append(" UNIQUE");
                 } else {
@@ -48,7 +47,6 @@ public class FirebirdTableGenerator {
 
         }
         if (globalState.getDmbsSpecificOptions().testIndexes && Randomly.getBoolean()) {
-            errors.add("Attempt to define a second PRIMARY KEY for the same table");
             List<FirebirdColumn> primaryKeyColumns = Randomly.nonEmptySubset(columns);
             sb.append(", PRIMARY KEY(");
             sb.append(primaryKeyColumns.stream().map(c -> c.getName()).collect(Collectors.joining(", ")));

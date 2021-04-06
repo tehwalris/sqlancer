@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -94,10 +93,20 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
         return columnType;
     }
 
-    public static class FirebirdTable extends AbstractRelationalTable<FirebirdColumn, TableIndex, FirebirdGlobalState> {
+    public static class FirebirdTable
+            extends AbstractRelationalTable<FirebirdColumn, FirebirdIndex, FirebirdGlobalState> {
 
-        public FirebirdTable(String tableName, List<FirebirdColumn> columns, boolean isView) {
-            super(tableName.replaceAll("\\s+", ""), columns, Collections.emptyList(), isView);
+        public FirebirdTable(String tableName, List<FirebirdColumn> columns, List<FirebirdIndex> indexes,
+                boolean isView) {
+            super(tableName.replaceAll("\\s+", ""), columns, indexes, isView);
+        }
+
+    }
+
+    public static class FirebirdIndex extends TableIndex {
+
+        public FirebirdIndex(String indexName) {
+            super(indexName.replaceAll("\\s+", ""));
         }
 
     }
@@ -118,7 +127,8 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
         List<FirebirdTable> databaseTables = new ArrayList<>();
         for (String tableName : tableNames) {
             List<FirebirdColumn> databaseColumns = getTableColumns(con, tableName);
-            FirebirdTable t = new FirebirdTable(tableName, databaseColumns, isView);
+            List<FirebirdIndex> indexes = getIndexes(con, tableName);
+            FirebirdTable t = new FirebirdTable(tableName, databaseColumns, indexes, isView);
             for (FirebirdColumn c : databaseColumns) {
                 c.setTable(t);
             }
@@ -195,6 +205,20 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
             }
         }
         return primaryKeys;
+    }
+
+    private static List<FirebirdIndex> getIndexes(SQLConnection con, String tableName) throws SQLException {
+        List<FirebirdIndex> indexes = new ArrayList<>();
+        try (Statement s = con.createStatement()) {
+            try (ResultSet rs = s.executeQuery(
+                    "SELECT RDB$INDEX_NAME FROM RDB$INDICES WHERE RDB$RELATION_NAME = '" + tableName + "';")) {
+                while (rs.next()) {
+                    String indexName = rs.getString("RDB$INDEX_NAME");
+                    indexes.add(new FirebirdIndex(indexName));
+                }
+            }
+        }
+        return indexes;
     }
 
 }
