@@ -11,6 +11,7 @@ import sqlancer.firebird.FirebirdErrors;
 import sqlancer.firebird.FirebirdProvider.FirebirdGlobalState;
 import sqlancer.firebird.FirebirdSchema.FirebirdColumn;
 import sqlancer.firebird.FirebirdSchema.FirebirdDataType;
+import sqlancer.firebird.FirebirdToStringVisitor;
 
 public class FirebirdTableGenerator {
 
@@ -22,7 +23,7 @@ public class FirebirdTableGenerator {
         sb.append(tableName);
         sb.append("(");
         List<FirebirdColumn> columns = getNewColumns();
-
+        FirebirdExpressionGenerator gen = new FirebirdExpressionGenerator(globalState).setColumns(columns);
         for (int i = 0; i < columns.size(); i++) {
             if (i != 0) {
                 sb.append(", ");
@@ -31,6 +32,11 @@ public class FirebirdTableGenerator {
             sb.append(" ");
             sb.append(columns.get(i).getType());
 
+            if (globalState.getDmbsSpecificOptions().testDefaultValues
+                    && Randomly.getBooleanWithRatherLowProbability()) {
+                sb.append(" DEFAULT ");
+                sb.append(FirebirdToStringVisitor.asString(gen.generateConstant(columns.get(i).getType())));
+            }
             if (globalState.getDmbsSpecificOptions().testIndexes && Randomly.getBooleanWithRatherLowProbability()) {
                 if (Randomly.getBoolean()) {
                     sb.append(" UNIQUE");
@@ -43,7 +49,7 @@ public class FirebirdTableGenerator {
                 sb.append(" NOT NULL");
             }
 
-            // TODO: add collate, check, default
+            // TODO: add collate, check
 
         }
         if (globalState.getDmbsSpecificOptions().testIndexes && Randomly.getBoolean()) {
