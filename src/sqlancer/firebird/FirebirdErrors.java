@@ -6,6 +6,13 @@ public final class FirebirdErrors {
 
     private FirebirdErrors() {
     }
+    
+    /*
+    public static void addExpressionErrors(ExpectedErrors errors) {
+    	errors.add("conversion error from string");
+    	errors.add("arithmetic exception, numeric overflow, or string truncation; numeric value is out of range");
+    }
+    */
 
     public static void addTableErrors(ExpectedErrors errors) {
         errors.add(
@@ -18,6 +25,8 @@ public final class FirebirdErrors {
         errors.add(", value \"*** null ***\"");
         errors.add("violation of PRIMARY or UNIQUE KEY constraint");
         errors.add("attempt to store duplicate value (visible to active transactions) in unique index");
+        errors.add("conversion error from string");
+    	errors.add("arithmetic exception, numeric overflow, or string truncation; numeric value is out of range");
     }
 
     public static void addIndexErrors(ExpectedErrors errors) {
