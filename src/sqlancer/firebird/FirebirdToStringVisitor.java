@@ -13,7 +13,7 @@ public class FirebirdToStringVisitor extends NewToStringVisitor<FirebirdExpressi
         if (expr instanceof FirebirdConstant) {
             visit((FirebirdConstant) expr);
         } else if (expr instanceof FirebirdSelect) {
-        	visit((FirebirdSelect) expr);
+            visit((FirebirdSelect) expr);
         } else {
             throw new AssertionError(expr.getClass());
         }
@@ -22,19 +22,19 @@ public class FirebirdToStringVisitor extends NewToStringVisitor<FirebirdExpressi
     private void visit(FirebirdConstant constant) {
         sb.append(constant.toString());
     }
-    
+
     private void visit(FirebirdSelect select) {
-    	sb.append("SELECT ");
-    	if (select.isDistinct()) {
-    		sb.append("DISTINCT ");
-    	}
-    	visit(select.getFetchColumns());
-    	sb.append(" FROM ");
-    	visit(select.getFromList());
-    	if (select.getWhereClause() != null) {
-    		sb.append(" WHERE ");
-    		visit(select.getWhereClause());
-    	}
+        sb.append("SELECT ");
+        if (select.isDistinct()) {
+            sb.append("DISTINCT ");
+        }
+        visit(select.getFetchColumns());
+        sb.append(" FROM ");
+        visit(select.getFromList());
+        if (select.getWhereClause() != null) {
+            sb.append(" WHERE ");
+            visit(select.getWhereClause());
+        }
     }
 
     public static String asString(Node<FirebirdExpression> expr) {

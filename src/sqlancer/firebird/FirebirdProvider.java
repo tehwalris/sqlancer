@@ -51,12 +51,12 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
         Randomly rand = globalState.getRandomly();
         switch (action) {
         case INSERT:
-        	return rand.getInteger(0, globalState.getOptions().getMaxNumberInserts() + 1);
+            return rand.getInteger(0, globalState.getOptions().getMaxNumberInserts() + 1);
         case CREATE_INDEX:
-        	return globalState.getDmbsSpecificOptions().testIndexes
-        			? rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumIndexes + 1) : 0;
+            return globalState.getDmbsSpecificOptions().testIndexes
+                    ? rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumIndexes + 1) : 0;
         case DELETE:
-        	return rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumDeletes + 1);
+            return rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumDeletes + 1);
         case UPDATE:
             return rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumUpdates + 1);
         case CREATE_VIEW:
