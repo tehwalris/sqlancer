@@ -71,6 +71,7 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
         FirebirdDataType columnType;
         switch (typeCode) {
         case "8": // INTEGER
+        case "16": // BIG INTEGER
             columnType = FirebirdDataType.INTEGER;
             break;
         case "10": // FLOAT

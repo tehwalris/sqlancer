@@ -20,6 +20,7 @@ import sqlancer.firebird.gen.FirebirdIndexGenerator;
 import sqlancer.firebird.gen.FirebirdInsertGenerator;
 import sqlancer.firebird.gen.FirebirdTableGenerator;
 import sqlancer.firebird.gen.FirebirdUpdateGenerator;
+import sqlancer.firebird.gen.FirebirdViewGenerator;
 
 public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, FirebirdOptions> {
 
@@ -31,7 +32,8 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
         INSERT(FirebirdInsertGenerator::getQuery), //
         CREATE_INDEX(FirebirdIndexGenerator::getQuery), //
         DELETE(FirebirdDeleteGenerator::getQuery), //
-        UPDATE(FirebirdUpdateGenerator::getQuery);
+        UPDATE(FirebirdUpdateGenerator::getQuery), //
+        CREATE_VIEW(FirebirdViewGenerator::getQuery);
 
         private final SQLQueryProvider<FirebirdGlobalState> sqlQueryProvider;
 
@@ -49,16 +51,16 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
         Randomly rand = globalState.getRandomly();
         switch (action) {
         case INSERT:
-            return rand.getInteger(0, globalState.getOptions().getMaxNumberInserts() + 1);
+        	return rand.getInteger(0, globalState.getOptions().getMaxNumberInserts() + 1);
         case CREATE_INDEX:
-            return 0;
-        // return globalState.getDmbsSpecificOptions().testIndexes
-        // ? rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumIndexes + 1) : 0;
+        	return globalState.getDmbsSpecificOptions().testIndexes
+        			? rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumIndexes + 1) : 0;
         case DELETE:
-            return 0;
-        // return rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumDeletes + 1);
+        	return rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumDeletes + 1);
         case UPDATE:
             return rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumUpdates + 1);
+        case CREATE_VIEW:
+            return rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumViews + 1);
         default:
             throw new AssertionError(action);
         }
