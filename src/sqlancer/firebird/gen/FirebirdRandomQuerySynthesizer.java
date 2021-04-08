@@ -14,9 +14,9 @@ import sqlancer.firebird.FirebirdSchema.FirebirdTables;
 import sqlancer.firebird.ast.FirebirdExpression;
 import sqlancer.firebird.ast.FirebirdSelect;
 
-public final class FirebirdRandomQueryGenerator {
+public final class FirebirdRandomQuerySynthesizer {
 	
-	private FirebirdRandomQueryGenerator() {
+	private FirebirdRandomQuerySynthesizer() {
 	}
 	
 	public static FirebirdSelect generateSelect(FirebirdGlobalState globalState, int nrColumns) {

@@ -26,7 +26,7 @@ public final class FirebirdViewGenerator {
 			sb.append(i);
 		}
 		sb.append(") AS ");
-		sb.append(FirebirdToStringVisitor.asString(FirebirdRandomQueryGenerator.generateSelect(globalState, nrColumns)));
+		sb.append(FirebirdToStringVisitor.asString(FirebirdRandomQuerySynthesizer.generateSelect(globalState, nrColumns)));
 		return new SQLQueryAdapter(sb.toString(), errors, true);
 	}
 }
