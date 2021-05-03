@@ -3,6 +3,7 @@ package sqlancer.firebird.gen;
 import sqlancer.Randomly;
 import sqlancer.common.query.ExpectedErrors;
 import sqlancer.common.query.SQLQueryAdapter;
+import sqlancer.firebird.FirebirdErrors;
 import sqlancer.firebird.FirebirdProvider.FirebirdGlobalState;
 import sqlancer.firebird.FirebirdToStringVisitor;
 
@@ -28,6 +29,8 @@ public final class FirebirdViewGenerator {
         sb.append(") AS ");
         sb.append(FirebirdToStringVisitor
                 .asString(FirebirdRandomQuerySynthesizer.generateSelect(globalState, nrColumns)));
+
+        FirebirdErrors.addInsertErrors(errors);
         return new SQLQueryAdapter(sb.toString(), errors, true);
     }
 }

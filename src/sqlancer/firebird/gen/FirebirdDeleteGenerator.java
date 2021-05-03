@@ -6,6 +6,7 @@ import sqlancer.common.query.SQLQueryAdapter;
 import sqlancer.firebird.FirebirdProvider.FirebirdGlobalState;
 import sqlancer.firebird.FirebirdSchema.FirebirdDataType;
 import sqlancer.firebird.FirebirdSchema.FirebirdTable;
+import sqlancer.firebird.FirebirdErrors;
 import sqlancer.firebird.FirebirdToStringVisitor;
 
 public final class FirebirdDeleteGenerator {
@@ -24,7 +25,7 @@ public final class FirebirdDeleteGenerator {
             sb.append(FirebirdToStringVisitor.asString(new FirebirdExpressionGenerator(globalState)
                     .setColumns(table.getColumns()).generateExpression(FirebirdDataType.BOOLEAN)));
         }
-
+        FirebirdErrors.addInsertErrors(errors);
         return new SQLQueryAdapter(sb.toString(), errors);
     }
 }
