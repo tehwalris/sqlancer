@@ -1,6 +1,7 @@
 package sqlancer.firebird;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,10 +10,11 @@ import com.beust.jcommander.Parameters;
 
 import sqlancer.DBMSSpecificOptions;
 import sqlancer.OracleFactory;
+import sqlancer.common.oracle.CompositeTestOracle;
 import sqlancer.common.oracle.TestOracle;
 import sqlancer.firebird.FirebirdOptions.FirebirdOracleFactory;
 import sqlancer.firebird.FirebirdProvider.FirebirdGlobalState;
-import sqlancer.firebird.test.FirebirdDummyOracle;
+import sqlancer.firebird.test.FirebirdPredicateCombiningWhereTester;
 
 @Parameters
 public class FirebirdOptions implements DBMSSpecificOptions<FirebirdOracleFactory> {
@@ -49,19 +51,28 @@ public class FirebirdOptions implements DBMSSpecificOptions<FirebirdOracleFactor
     @Parameter(names = "--max-num-views", description = "The maximum number of views that can be generated for a database", arity = 1)
     public int maxNumViews = 1;
 
+    @Parameter(names = "--num-oracle-predicates", description = "The number of predicates used in the predicate combining oracle", arity = 1)
+    public int numOraclePredicates = 10;
+
     @Parameter(names = "--oracle")
-    public List<FirebirdOracleFactory> oracles = Arrays.asList(); // TODO: replace with default oracle option
+    public List<FirebirdOracleFactory> oracles = Arrays.asList(FirebirdOracleFactory.PREDICATE_COMBINING);
 
     public enum FirebirdOracleFactory implements OracleFactory<FirebirdGlobalState> {
 
-        // TODO: add oracles of Firebird here
-        DUMMY {
+        WHERE {
             @Override
             public TestOracle create(FirebirdGlobalState globalState) throws SQLException {
-                return new FirebirdDummyOracle();
+                return new FirebirdPredicateCombiningWhereTester(globalState);
+            }
+        },
+        PREDICATE_COMBINING {
+            @Override
+            public TestOracle create(FirebirdGlobalState globalState) throws SQLException {
+                List<TestOracle> oracles = new ArrayList<>();
+                oracles.add(new FirebirdPredicateCombiningWhereTester(globalState));
+                return new CompositeTestOracle(oracles, globalState);
             }
         };
-
     }
 
     @Override

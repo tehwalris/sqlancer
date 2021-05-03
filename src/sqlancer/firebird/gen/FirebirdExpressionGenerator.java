@@ -33,6 +33,12 @@ public final class FirebirdExpressionGenerator
         this.globalState = globalState;
     }
 
+    public FirebirdExpressionGenerator(FirebirdGlobalState globalState, int maxDepth) {
+        this.r = globalState.getRandomly();
+        this.maxDepth = maxDepth;
+        this.globalState = globalState;
+    }
+
     @Override
     public Node<FirebirdExpression> generateExpression(FirebirdDataType dataType, int depth) {
         return generateExpressionInternal(dataType, depth);

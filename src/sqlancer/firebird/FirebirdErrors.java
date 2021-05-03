@@ -27,6 +27,18 @@ public final class FirebirdErrors {
         errors.add("arithmetic exception, numeric overflow, or string truncation");
     }
 
+    public static void addExpressionErrors(ExpectedErrors errors) {
+        errors.add(", value \"*** null ***\"");
+        errors.add("violation of PRIMARY or UNIQUE KEY constraint");
+        errors.add("attempt to store duplicate value (visible to active transactions) in unique index");
+        errors.add("conversion error from string");
+        errors.add("arithmetic exception, numeric overflow, or string truncation");
+        errors.add("Integer overflow");
+        errors.add("expression evaluation not supported");
+        errors.add("The result of an integer operation caused the most significant bit of the result to carry.");
+        errors.add("numeric value is out of range");
+    }
+
     public static void addIndexErrors(ExpectedErrors errors) {
         errors.add("attempt to store duplicate value (visible to active transactions) in unique index");
     }

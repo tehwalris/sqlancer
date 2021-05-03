@@ -3,10 +3,10 @@ package sqlancer.firebird.gen;
 import sqlancer.Randomly;
 import sqlancer.common.query.ExpectedErrors;
 import sqlancer.common.query.SQLQueryAdapter;
+import sqlancer.firebird.FirebirdErrors;
 import sqlancer.firebird.FirebirdProvider.FirebirdGlobalState;
 import sqlancer.firebird.FirebirdSchema.FirebirdDataType;
 import sqlancer.firebird.FirebirdSchema.FirebirdTable;
-import sqlancer.firebird.FirebirdErrors;
 import sqlancer.firebird.FirebirdToStringVisitor;
 
 public final class FirebirdDeleteGenerator {
