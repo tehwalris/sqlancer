@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import sqlancer.Randomly;
 import sqlancer.common.ast.newast.ColumnReferenceNode;
+import sqlancer.common.ast.newast.NewBinaryOperatorNode;
 import sqlancer.common.ast.newast.Node;
 import sqlancer.common.ast.newast.TableReferenceNode;
 import sqlancer.common.gen.ExpressionGenerator;
@@ -22,6 +23,7 @@ import sqlancer.firebird.FirebirdToStringVisitor;
 import sqlancer.firebird.ast.FirebirdExpression;
 import sqlancer.firebird.ast.FirebirdSelect;
 import sqlancer.firebird.gen.FirebirdExpressionGenerator;
+import sqlancer.firebird.gen.FirebirdExpressionGenerator.FirebirdBinaryLogicalOperator;
 
 public class FirebirdPredicateCombiningBase
         extends PredicateCombiningOracleBase<Node<FirebirdExpression>, FirebirdGlobalState> implements TestOracle {
@@ -30,10 +32,13 @@ public class FirebirdPredicateCombiningBase
     FirebirdTables targetTables;
     FirebirdExpressionGenerator gen;
     FirebirdSelect select;
+    int numColumns;
+    int maxPredicateDepth;
 
     public FirebirdPredicateCombiningBase(FirebirdGlobalState state) {
         super(state);
         FirebirdErrors.addExpressionErrors(errors);
+        this.maxPredicateDepth = state.getDmbsSpecificOptions().maxPredicateCombinations;
     }
 
     @Override
@@ -42,7 +47,7 @@ public class FirebirdPredicateCombiningBase
         targetTables = s.getRandomTableNonEmptyTables();
         gen = new FirebirdExpressionGenerator(state, 1).setColumns(targetTables.getColumns());
         List<Node<FirebirdExpression>> fetchColumns = generateFetchColumns();
-        initializePredicateList(state.getDmbsSpecificOptions().numOraclePredicates);
+        initializeInternalTables(state.getDmbsSpecificOptions().numOraclePredicates, numColumns);
         select = new FirebirdSelect();
         select.setFetchColumns(fetchColumns);
         List<FirebirdTable> tables = targetTables.getTables();
@@ -63,10 +68,12 @@ public class FirebirdPredicateCombiningBase
         List<Node<FirebirdExpression>> columns = new ArrayList<>();
         if (Randomly.getBoolean()) {
             columns.add(new ColumnReferenceNode<>(new FirebirdColumn("*", null, false, false)));
+            numColumns = targetTables.getColumns().size();
         } else {
             columns = Randomly.nonEmptySubset(targetTables.getColumns()).stream()
                     .map(c -> new ColumnReferenceNode<FirebirdExpression, FirebirdColumn>(c))
                     .collect(Collectors.toList());
+            numColumns = columns.size();
         }
         return columns;
     }
@@ -74,6 +81,28 @@ public class FirebirdPredicateCombiningBase
     @Override
     protected ExpressionGenerator<Node<FirebirdExpression>> getGen() {
         return gen;
+    }
+
+    // TODO: maybe refactor s.t. this can be done in PredicateCombiningOracleBase
+    protected Node<FirebirdExpression> getCombinedPredicate() {
+        return internalPredicateCombination(0);
+    }
+
+    private Node<FirebirdExpression> internalPredicateCombination(int depth) {
+        if (Randomly.getBooleanWithRatherLowProbability() || depth > maxPredicateDepth) {
+            return Randomly.fromList(predicates);
+        } else {
+            Node<FirebirdExpression> leftPredicate = internalPredicateCombination(depth + 1);
+            Node<FirebirdExpression> rightPredicate = internalPredicateCombination(depth + 1);
+            if (Randomly.getBoolean()) {
+                leftPredicate = gen.negatePredicate(leftPredicate);
+            }
+            if (Randomly.getBoolean()) {
+                rightPredicate = gen.negatePredicate(rightPredicate);
+            }
+            return new NewBinaryOperatorNode<FirebirdExpression>(leftPredicate, rightPredicate,
+                    FirebirdBinaryLogicalOperator.getRandom());
+        }
     }
 
 }

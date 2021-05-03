@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sqlancer.IgnoreMeException;
-import sqlancer.SQLConnection;
 import sqlancer.SQLGlobalState;
 import sqlancer.common.gen.ExpressionGenerator;
 import sqlancer.common.query.ExpectedErrors;
@@ -26,31 +25,33 @@ public abstract class PredicateCombiningOracleBase<E, S extends SQLGlobalState<?
 
     protected final S state;
     protected final ExpectedErrors errors = new ExpectedErrors();
-    protected final SQLConnection con;
 
     protected PredicateCombiningOracleBase(S state) {
         this.state = state;
-        this.con = state.getConnection();
     }
 
     protected E generatePredicate() {
         return getGen().generatePredicate();
     }
 
-    protected void initializePredicateList(int numPredicates) {
+    protected void initializeInternalTables(int numPredicates, int numColumns) {
         ExpressionGenerator<E> gen = getGen();
         if (gen == null) {
             throw new IllegalStateException();
         }
         predicates = new ArrayList<>();
         predicateEvaluations = new ArrayList<>();
-        tableContent = new ArrayList<>();
         for (int i = 0; i < numPredicates; i++) {
             E predicate = generatePredicate();
             if (predicate == null) {
                 throw new IllegalStateException();
             }
             predicates.add(predicate);
+            predicateEvaluations.add(new ArrayList<>());
+        }
+        tableContent = new ArrayList<>();
+        for (int i = 0; i < numColumns; i++) {
+            tableContent.add(new ArrayList<>());
         }
     }
 
@@ -64,11 +65,9 @@ public abstract class PredicateCombiningOracleBase<E, S extends SQLGlobalState<?
             }
             int numColumns = result.getColumnCount();
             while (result.next()) {
-                List<String> row = new ArrayList<>();
                 for (int i = 1; i <= numColumns; i++) {
-                    row.add(result.getString(i));
+                    table.get(i - 1).add(result.getString(i));
                 }
-                table.add(row);
             }
         } catch (Exception e) {
             if (e instanceof IgnoreMeException) {
