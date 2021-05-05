@@ -7,13 +7,13 @@ import java.util.stream.Collectors;
 
 import sqlancer.Randomly;
 import sqlancer.common.ast.newast.ColumnReferenceNode;
-import sqlancer.common.ast.newast.NewBinaryOperatorNode;
 import sqlancer.common.ast.newast.Node;
 import sqlancer.common.ast.newast.TableReferenceNode;
 import sqlancer.common.gen.ExpressionGenerator;
 import sqlancer.common.oracle.PredicateCombiningOracleBase;
 import sqlancer.common.oracle.TestOracle;
 import sqlancer.firebird.FirebirdErrors;
+import sqlancer.firebird.FirebirdKnownPredicate;
 import sqlancer.firebird.FirebirdProvider.FirebirdGlobalState;
 import sqlancer.firebird.FirebirdSchema;
 import sqlancer.firebird.FirebirdSchema.FirebirdColumn;
@@ -31,7 +31,7 @@ public class FirebirdPredicateCombiningBase
     FirebirdSchema s;
     FirebirdTables targetTables;
     FirebirdExpressionGenerator gen;
-    FirebirdSelect select;
+    List<FirebirdKnownPredicate> knownPredicates;
     int numColumns;
     int maxPredicateDepth;
 
@@ -48,20 +48,37 @@ public class FirebirdPredicateCombiningBase
         gen = new FirebirdExpressionGenerator(state, 1).setColumns(targetTables.getColumns());
         List<Node<FirebirdExpression>> fetchColumns = generateFetchColumns();
         initializeInternalTables(state.getDmbsSpecificOptions().numOraclePredicates, numColumns);
-        select = new FirebirdSelect();
-        select.setFetchColumns(fetchColumns);
-        List<FirebirdTable> tables = targetTables.getTables();
-        List<TableReferenceNode<FirebirdExpression, FirebirdTable>> tableList = tables.stream()
+        List<Node<FirebirdExpression>> tableList = targetTables.getTables().stream()
                 .map(t -> new TableReferenceNode<FirebirdExpression, FirebirdTable>(t)).collect(Collectors.toList());
-        // TODO: Add joins to select statement
-        select.setFromList(tableList.stream().collect(Collectors.toList()));
-        select.setWhereClause(null);
-        String tableQueryString = FirebirdToStringVisitor.asString(select);
-        select.setFetchColumns(predicates);
-        String predicateQueryString = FirebirdToStringVisitor.asString(select);
-        select.setFetchColumns(fetchColumns);
-        generateTable(tableContent, tableQueryString);
-        generateTable(predicateEvaluations, predicateQueryString);
+
+        {
+            FirebirdSelect select = new FirebirdSelect();
+            // TODO: Add joins to select statement
+            select.setFromList(tableList);
+            select.setFetchColumns(fetchColumns);
+            generateTable(tableContent, FirebirdToStringVisitor.asString(select));
+        }
+
+        {
+            FirebirdSelect select = new FirebirdSelect();
+            select.setFromList(tableList);
+            select.setFetchColumns(predicates);
+            generateTable(predicateEvaluations, FirebirdToStringVisitor.asString(select));
+        }
+
+        for (int i = 0; i < predicates.size(); i++) {
+            this.knownPredicates.add(new FirebirdKnownPredicate(predicates.get(i),
+                    predicateEvaluationsToBooleans(predicateEvaluations.get(i))));
+        }
+
+        FirebirdKnownPredicate combinedPredicate = getCombinedPredicate();
+
+        {
+            FirebirdSelect select = new FirebirdSelect();
+            select.setFromList(tableList);
+            select.setFetchColumns(fetchColumns);
+            select.setWhereClause(combinedPredicate.getExpression());
+        }
     }
 
     List<Node<FirebirdExpression>> generateFetchColumns() {
@@ -84,25 +101,39 @@ public class FirebirdPredicateCombiningBase
     }
 
     // TODO: maybe refactor s.t. this can be done in PredicateCombiningOracleBase
-    protected Node<FirebirdExpression> getCombinedPredicate() {
+    protected FirebirdKnownPredicate getCombinedPredicate() {
         return internalPredicateCombination(0);
     }
 
-    private Node<FirebirdExpression> internalPredicateCombination(int depth) {
+    private FirebirdKnownPredicate internalPredicateCombination(int depth) {
         if (Randomly.getBooleanWithRatherLowProbability() || depth > maxPredicateDepth) {
-            return Randomly.fromList(predicates);
+            return Randomly.fromList(knownPredicates);
         } else {
-            Node<FirebirdExpression> leftPredicate = internalPredicateCombination(depth + 1);
-            Node<FirebirdExpression> rightPredicate = internalPredicateCombination(depth + 1);
+            FirebirdKnownPredicate leftPredicate = internalPredicateCombination(depth + 1);
+            FirebirdKnownPredicate rightPredicate = internalPredicateCombination(depth + 1);
             if (Randomly.getBoolean()) {
-                leftPredicate = gen.negatePredicate(leftPredicate);
+                leftPredicate = leftPredicate.negate();
             }
             if (Randomly.getBoolean()) {
-                rightPredicate = gen.negatePredicate(rightPredicate);
+                rightPredicate = rightPredicate.negate();
             }
-            return new NewBinaryOperatorNode<FirebirdExpression>(leftPredicate, rightPredicate,
+            return FirebirdKnownPredicate.applyBinaryOperator(leftPredicate, rightPredicate,
                     FirebirdBinaryLogicalOperator.getRandom());
         }
     }
 
+    private static List<Boolean> predicateEvaluationsToBooleans(List<String> results) {
+        return results.stream().map(v -> {
+            switch (v) {
+            case "TRUE":
+                return true;
+            case "FALSE":
+                return false;
+            case "NULL":
+                return null;
+            default:
+                throw new AssertionError(v);
+            }
+        }).collect(Collectors.toList());
+    }
 }
