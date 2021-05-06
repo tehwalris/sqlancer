@@ -17,7 +17,7 @@ public class FirebirdPredicateCombiningWhereTester extends FirebirdPredicateComb
     public void check() throws SQLException {
         super.check();
 
-        Node<FirebirdExpression> combinedPredicate = getCombinedPredicate();
+        //Node<FirebirdExpression> combinedPredicate = getCombinedPredicate();
 
     }
 }

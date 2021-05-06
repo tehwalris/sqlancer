@@ -66,8 +66,9 @@ public class FirebirdPredicateCombiningBase
             generateTable(predicateEvaluations, FirebirdToStringVisitor.asString(select));
         }
 
+        knownPredicates = new ArrayList<>();
         for (int i = 0; i < predicates.size(); i++) {
-            this.knownPredicates.add(new FirebirdKnownPredicate(predicates.get(i),
+            knownPredicates.add(new FirebirdKnownPredicate(predicates.get(i),
                     predicateEvaluationsToBooleans(predicateEvaluations.get(i))));
         }
 
@@ -124,13 +125,12 @@ public class FirebirdPredicateCombiningBase
 
     private static List<Boolean> predicateEvaluationsToBooleans(List<String> results) {
         return results.stream().map(v -> {
+        	if (v == null) return null;
             switch (v) {
-            case "TRUE":
+            case "true":
                 return true;
-            case "FALSE":
+            case "false":
                 return false;
-            case "NULL":
-                return null;
             default:
                 throw new AssertionError(v);
             }
