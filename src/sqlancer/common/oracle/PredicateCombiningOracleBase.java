@@ -20,7 +20,7 @@ import sqlancer.common.query.SQLancerResultSet;
 public abstract class PredicateCombiningOracleBase<E, S extends SQLGlobalState<?, ?>> implements TestOracle {
 
     protected List<E> predicates;
-    protected List<List<String>> predicateEvaluations;
+    protected List<List<Boolean>> predicateEvaluations;
     protected List<List<String>> tableContent;
 
     protected final S state;
@@ -55,7 +55,7 @@ public abstract class PredicateCombiningOracleBase<E, S extends SQLGlobalState<?
         }
     }
 
-    protected void generateTable(List<List<String>> table, String queryString) throws SQLException {
+    protected void generateTables(String queryString, int numColumns, int numPredicates) throws SQLException {
         SQLQueryAdapter q = new SQLQueryAdapter(queryString, errors);
         SQLancerResultSet result = null;
         try {
@@ -63,10 +63,13 @@ public abstract class PredicateCombiningOracleBase<E, S extends SQLGlobalState<?
             if (result == null) {
                 throw new IgnoreMeException();
             }
-            int numColumns = result.getColumnCount();
             while (result.next()) {
                 for (int i = 1; i <= numColumns; i++) {
-                    table.get(i - 1).add(result.getString(i));
+                    tableContent.get(i - 1).add(result.getString(i));
+                }
+                for (int i  = 1; i <= numPredicates; i++) {
+                    String predicate = result.getString(numColumns + i);
+                    predicateEvaluations.get(i - 1).add(predicateEvaluationToBoolean(predicate));
                 }
             }
         } catch (Exception e) {
@@ -93,4 +96,34 @@ public abstract class PredicateCombiningOracleBase<E, S extends SQLGlobalState<?
 
     protected abstract ExpressionGenerator<E> getGen();
 
+    protected Boolean predicateEvaluationToBoolean(String v) {
+        if (v == null) {
+            return null;
+        }
+        switch (v) {
+        case "true":
+            return true;
+        case "false":
+            return false;
+        default:
+            throw new AssertionError(v);
+        }
+    }
+
+    protected static List<String> getFirstColumnFilteredByExpectedResults(List<List<String>> tableContent, List<Boolean> expectedResults) {
+        try {
+            List<String> output = new ArrayList<>();
+            for (int i = 0; i < tableContent.get(0).size(); i++) {
+                assert tableContent.get(i).size() == expectedResults.size();
+                if (expectedResults.get(i) != null && expectedResults.get(i)) {
+                    output.add(tableContent.get(0).get(i));
+                }
+            }
+            return output;
+        } catch(Exception exception) {
+            System.out.print("DEBUG");
+            System.out.println(expectedResults.size());
+            throw exception;
+        }
+    }
 }

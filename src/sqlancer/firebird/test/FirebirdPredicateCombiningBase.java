@@ -4,7 +4,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import sqlancer.ComparatorHelper;
 import sqlancer.Randomly;
 import sqlancer.common.ast.newast.ColumnReferenceNode;
 import sqlancer.common.ast.newast.Node;
@@ -56,36 +58,37 @@ public class FirebirdPredicateCombiningBase
             // TODO: Add joins to select statement
             select.setFromList(tableList);
             select.setFetchColumns(fetchColumns);
-            generateTable(tableContent, FirebirdToStringVisitor.asString(select));
+            List<Node<FirebirdExpression>> allColumns = Stream.concat(fetchColumns.stream(), predicates.stream()).collect(Collectors.toList());
+            select.setFetchColumns(allColumns);
+            generateTables(FirebirdToStringVisitor.asString(select), numColumns, state.getDmbsSpecificOptions().numOraclePredicates);
         }
-
-        {
-            FirebirdSelect select = new FirebirdSelect();
-            select.setFromList(tableList);
-            select.setFetchColumns(predicates);
-            generateTable(predicateEvaluations, FirebirdToStringVisitor.asString(select));
-        }
-
+        
         knownPredicates = new ArrayList<>();
         for (int i = 0; i < predicates.size(); i++) {
-            knownPredicates.add(new FirebirdKnownPredicate(predicates.get(i),
-                    predicateEvaluationsToBooleans(predicateEvaluations.get(i))));
+            knownPredicates.add(new FirebirdKnownPredicate(predicates.get(i), predicateEvaluations.get(i)));
         }
 
         FirebirdKnownPredicate combinedPredicate = getCombinedPredicate();
 
+        String combinedQueryString;
         {
             FirebirdSelect select = new FirebirdSelect();
             select.setFromList(tableList);
             select.setFetchColumns(fetchColumns);
             select.setWhereClause(combinedPredicate.getExpression());
+
+            combinedQueryString = FirebirdToStringVisitor.asString(select);
         }
+        List<String> resultSet = ComparatorHelper.getResultSetFirstColumnAsString(combinedQueryString, errors, state);
+
+        List<String> expectedResultSet = getFirstColumnFilteredByExpectedResults(tableContent, combinedPredicate.getExpectedResults());
+        ComparatorHelper.assumeResultSetsAreEqual(resultSet, expectedResultSet, combinedQueryString, new ArrayList<>(), state);
     }
 
     List<Node<FirebirdExpression>> generateFetchColumns() {
         List<Node<FirebirdExpression>> columns = new ArrayList<>();
         if (Randomly.getBoolean()) {
-            columns.add(new ColumnReferenceNode<>(new FirebirdColumn("*", null, false, false)));
+            columns = targetTables.getColumns().stream().map(c -> new ColumnReferenceNode<FirebirdExpression, FirebirdColumn>(c)).collect(Collectors.toList());
             numColumns = targetTables.getColumns().size();
         } else {
             columns = Randomly.nonEmptySubset(targetTables.getColumns()).stream()
@@ -121,19 +124,5 @@ public class FirebirdPredicateCombiningBase
             return FirebirdKnownPredicate.applyBinaryOperator(leftPredicate, rightPredicate,
                     FirebirdBinaryLogicalOperator.getRandom());
         }
-    }
-
-    private static List<Boolean> predicateEvaluationsToBooleans(List<String> results) {
-        return results.stream().map(v -> {
-        	if (v == null) return null;
-            switch (v) {
-            case "true":
-                return true;
-            case "false":
-                return false;
-            default:
-                throw new AssertionError(v);
-            }
-        }).collect(Collectors.toList());
     }
 }
