@@ -41,6 +41,7 @@ public final class FirebirdIndexGenerator {
         }
         sb.append(")");
         FirebirdErrors.addIndexErrors(errors);
+        FirebirdErrors.addUnstableErrors(errors);
         return new SQLQueryAdapter(sb.toString(), errors, true);
     }
 

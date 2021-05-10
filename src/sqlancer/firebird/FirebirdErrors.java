@@ -43,4 +43,10 @@ public final class FirebirdErrors {
         errors.add("attempt to store duplicate value (visible to active transactions) in unique index");
     }
 
+    public static void addUnstableErrors(ExpectedErrors errors) {
+        errors.add("too many open handles to database");
+        errors.add("Error writing data to the connection.");
+        errors.add("Connection reset by peer: socket write error");
+        errors.add("invalid request handle");
+    }
 }

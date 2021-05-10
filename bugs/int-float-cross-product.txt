@@ -1,0 +1,34 @@
+SQL> create table t0(c0 float, primary key(c0));
+SQL> create table t1(c1 integer);
+SQL> insert into t0 (c0) values (1.229804118E9);
+SQL> insert into t1 (c1) values (1229804118);
+SQL> commit;
+
+SQL> SELECT T0.C0, T1.C1 FROM T0, T1 WHERE (((+ T0.C0))=(T1.C1));
+SQL> SELECT T0.C0, T1.C1, (((+ T0.C0))=(T1.C1)) FROM T0, T1;
+
+            C0           C1         
+============== ============ ======= 
+ 1.2298042e+09   1229804118 <true>  
+
+SQL> SET EXPLAIN;
+SQL> SELECT T0.C0, T1.C1, (((+ T0.C0))=(T1.C1)) FROM T0, T1;
+
+Select Expression
+    -> Nested Loop Join (inner)
+        -> Table "T0" Full Scan
+        -> Table "T1" Full Scan
+
+            C0           C1         
+============== ============ ======= 
+ 1.2298042e+09   1229804118 <true>  
+
+SQL> SELECT T0.C0, T1.C1 FROM T0, T1 WHERE (((+ T0.C0))=(T1.C1));
+
+Select Expression
+    -> Nested Loop Join (inner)
+        -> Table "T1" Full Scan
+        -> Filter
+            -> Table "T0" Access By ID
+                -> Bitmap
+                    -> Index "RDB$PRIMARY1" Unique Scan

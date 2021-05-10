@@ -26,6 +26,7 @@ public final class FirebirdDeleteGenerator {
                     .setColumns(table.getColumns()).generateExpression(FirebirdDataType.BOOLEAN)));
         }
         FirebirdErrors.addInsertErrors(errors);
+        FirebirdErrors.addUnstableErrors(errors);
         return new SQLQueryAdapter(sb.toString(), errors);
     }
 }

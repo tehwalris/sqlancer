@@ -62,6 +62,7 @@ public class FirebirdTableGenerator {
         sb.append(")");
 
         FirebirdErrors.addTableErrors(errors);
+        FirebirdErrors.addUnstableErrors(errors);
 
         return new SQLQueryAdapter(sb.toString(), errors, true);
     }

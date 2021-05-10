@@ -53,6 +53,7 @@ public class FirebirdInsertGenerator {
         }
 
         FirebirdErrors.addInsertErrors(errors);
+        FirebirdErrors.addUnstableErrors(errors);
 
         return new SQLQueryAdapter(sb.toString(), errors);
     }

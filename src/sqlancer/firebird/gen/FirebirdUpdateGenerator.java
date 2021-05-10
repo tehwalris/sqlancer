@@ -40,6 +40,8 @@ public final class FirebirdUpdateGenerator {
             sb.append(FirebirdToStringVisitor.asString(expr));
         }
         FirebirdErrors.addInsertErrors(errors);
+        FirebirdErrors.addExpressionErrors(errors);
+        FirebirdErrors.addUnstableErrors(errors);
         return new SQLQueryAdapter(sb.toString(), errors);
     }
 

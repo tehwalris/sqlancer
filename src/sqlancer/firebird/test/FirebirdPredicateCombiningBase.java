@@ -40,6 +40,7 @@ public class FirebirdPredicateCombiningBase
     public FirebirdPredicateCombiningBase(FirebirdGlobalState state) {
         super(state);
         FirebirdErrors.addExpressionErrors(errors);
+        FirebirdErrors.addUnstableErrors(errors);
         this.maxPredicateDepth = state.getDmbsSpecificOptions().maxPredicateCombinations;
     }
 
@@ -109,8 +110,9 @@ public class FirebirdPredicateCombiningBase
         return internalPredicateCombination(0);
     }
 
+
     private FirebirdKnownPredicate internalPredicateCombination(int depth) {
-        if (Randomly.getBooleanWithRatherLowProbability() || depth > maxPredicateDepth) {
+        if (Randomly.getBooleanWithRatherLowProbability() || depth >= maxPredicateDepth) {
             return Randomly.fromList(knownPredicates);
         } else {
             FirebirdKnownPredicate leftPredicate = internalPredicateCombination(depth + 1);
