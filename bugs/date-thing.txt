@@ -1,34 +1,29 @@
-SQL> CREATE TABLE t0(c0 FLOAT, c1 DATE, c2 DATE, PRIMARY KEY(c0));
-SQL> CREATE UNIQUE INDEX i0 ON T0(C1, C2);
-SQL> CREATE UNIQUE INDEX i1 ON T0(C2);
-SQL> CREATE INDEX i15 ON T0(C0);
-SQL> CREATE UNIQUE INDEX i2 ON T0(C2);
-SQL> INSERT INTO T0 (C0, C1, C2) VALUES (0.46547148321980025, DATE '1969-12-13', DATE '1969-12-31');
-SQL> commit;
-SQL> CREATE UNIQUE ASC INDEX i3 ON T0(C2);
+SQL> create table t0(c0 float, primary key(c0));
+SQL> insert into t0 (c0) values (0.46547148321980025);
 SQL> commit;
 
-SQL> SELECT T0.C2 FROM T0 WHERE (((NOT ((((((DATE '1970-01-01')NOT LIKE(T0.C1))) IS TRUE))AND((((NOT false)) IS FALSE)))))AND((NOT (((NOT ((T0.C0)<=(((429478996)-(T0.C0))))))OR(((((true) IS FALSE))OR(((T0.C0)!=(0.46547148321980025)))))))));
-SQL> SELECT T0.C0, T0.C1, T0.C2, (((NOT ((((((DATE '1970-01-01')NOT LIKE(T0.C1))) IS TRUE))AND((((NOT false)) IS FALSE)))))AND((NOT (((NOT ((T
+SQL> select c0, c0 = 0.46547148321980025 from t0;
 
-            C0          C1          C2         
-============== =========== =========== ======= 
-    0.46547148 1969-12-13  1969-12-31  <true>  
+            C0         
+============== ======= 
+    0.46547148 <true>  
 
-SQL> SET EXPLAIN;
-SQL> SELECT T0.C2 FROM T0 WHERE (((NOT ((((((DATE '1970-01-01')NOT LIKE(T0.C1))) IS TRUE))AND((((NOT false)) IS FALSE)))))AND((NOT (((NOT ((T0.C0)<=(((429478996)-(T0.C0))))))OR(((((true) IS FALSE))OR(((T0.C0)!=(0.46547148321980025)))))))));
+SQL> select c0 from t0 where c0 = 0.46547148321980025;
 
-Select Expression
-    -> Filter
-        -> Filter
-            -> Table "T0" Access By ID
-                -> Bitmap
-                    -> Index "RDB$PRIMARY1" Unique Scan
-SQL> SELECT T0.C0, T0.C1, T0.C2, (((NOT ((((((DATE '1970-01-01')NOT LIKE(T0.C1))) IS TRUE))AND((((NOT false)) IS FALSE)))))AND((NOT (((NOT ((T0.C0)<=(((429478996)-(T0.C0))))))OR(((((true) IS FALSE))OR(((T0.C0)!=(0.46547148321980025))))))))) FROM T0;
+SQL> set explain;
+SQL> select c0, c0 = 0.46547148321980025 from t0;
 
 Select Expression
     -> Table "T0" Full Scan
 
-            C0          C1          C2         
-============== =========== =========== ======= 
-    0.46547148 1969-12-13  1969-12-31  <true>  
+            C0         
+============== ======= 
+    0.46547148 <true>  
+
+SQL> select c0 from t0 where c0 = 0.46547148321980025;
+
+Select Expression
+    -> Filter
+        -> Table "T0" Access By ID
+            -> Bitmap
+                -> Index "RDB$PRIMARY1" Unique Scan
