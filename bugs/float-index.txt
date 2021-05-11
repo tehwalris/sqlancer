@@ -1,29 +1,16 @@
 SQL> create table t0(c0 float, primary key(c0));
-SQL> insert into t0 (c0) values (0.46547148321980025);
+SQL> insert into t0 (c0) values (2);
 SQL> commit;
+SQL> 
+SQL> select c0, c0 = 1.999999999999999, c0 = 1.9999999999999999 from t0;
 
-SQL> select c0, c0 = 0.46547148321980025 from t0;
+            C0                 
+============== ======= ======= 
+     2.0000000 <true>  <true>  
 
-            C0         
-============== ======= 
-    0.46547148 <true>  
+SQL> select c0 from t0 where c0 = 1.999999999999999;
+SQL> select c0 from t0 where c0 = 1.9999999999999999;
 
-SQL> select c0 from t0 where c0 = 0.46547148321980025;
-
-SQL> set explain;
-SQL> select c0, c0 = 0.46547148321980025 from t0;
-
-Select Expression
-    -> Table "T0" Full Scan
-
-            C0         
-============== ======= 
-    0.46547148 <true>  
-
-SQL> select c0 from t0 where c0 = 0.46547148321980025;
-
-Select Expression
-    -> Filter
-        -> Table "T0" Access By ID
-            -> Bitmap
-                -> Index "RDB$PRIMARY1" Unique Scan
+            C0 
+============== 
+     2.0000000 
