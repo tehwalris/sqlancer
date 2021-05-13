@@ -82,8 +82,27 @@ public class FirebirdPredicateCombiningBase
         }
         List<String> resultSet = ComparatorHelper.getResultSetFirstColumnAsString(combinedQueryString, errors, state);
 
-        List<String> expectedResultSet = getFirstColumnFilteredByExpectedResults(tableContent, combinedPredicate.getExpectedResults());
-        ComparatorHelper.assumeResultSetsAreEqual(resultSet, expectedResultSet, combinedQueryString, new ArrayList<>(), state);
+        List<String> expectedResultSet = getFirstColumnFilteredByExpectedResults(tableContent,
+                combinedPredicate.getExpectedResults());
+        ComparatorHelper.assumeResultSetsAreEqual(resultSet, expectedResultSet, combinedQueryString, new ArrayList<>(),
+                state);
+
+        // HACK Firebird does not free prepared statements until the connection is
+        // closed.
+        // We could not find a method or configuration option to free prepared
+        // statements "correctly",
+        // so this frees them all occasionally.
+        if (Randomly.getBooleanWithRatherLowProbability()) {
+            try {
+                FBConnection connection = ((FBConnection) state.getConnection().getConnection());
+                Method freeStatements = connection.getClass().getDeclaredMethod("freeStatements");
+                freeStatements.setAccessible(true);
+                freeStatements.invoke(connection);
+            } catch (Exception e) {
+                System.out.println(e);
+                throw new RuntimeException("failed to free prepared statements");
+            }
+        }
     }
 
     List<Node<FirebirdExpression>> generateFetchColumns() {
