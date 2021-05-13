@@ -25,6 +25,7 @@ public final class FirebirdErrors {
         errors.add("attempt to store duplicate value (visible to active transactions) in unique index");
         errors.add("conversion error from string");
         errors.add("arithmetic exception, numeric overflow, or string truncation");
+        errors.add("Integer overflow");
     }
 
     public static void addExpressionErrors(ExpectedErrors errors) {
