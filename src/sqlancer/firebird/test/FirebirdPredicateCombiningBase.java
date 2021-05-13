@@ -1,10 +1,13 @@
 package sqlancer.firebird.test;
 
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.firebirdsql.jdbc.FBConnection;
 
 import sqlancer.ComparatorHelper;
 import sqlancer.Randomly;
