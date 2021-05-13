@@ -22,7 +22,7 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
     // Boolean is only supported for Firebird version 3.0 and later
     public enum FirebirdDataType {
 
-        INTEGER, FLOAT, BOOLEAN, TIMESTAMP, DATE;
+        INTEGER, FLOAT, BOOLEAN, TIMESTAMP, DATE, CHAR;
 
         public static FirebirdDataType getRandom() {
             return Randomly.fromOptions(values());
@@ -70,6 +70,9 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
     private static FirebirdDataType getColumnType(String typeCode) {
         FirebirdDataType columnType;
         switch (typeCode) {
+        case "14": // CHAR
+        	columnType = FirebirdDataType.CHAR;
+        	break;
         case "8": // INTEGER
         case "16": // BIG INTEGER
             columnType = FirebirdDataType.INTEGER;
