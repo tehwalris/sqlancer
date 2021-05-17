@@ -12,6 +12,7 @@ import sqlancer.firebird.FirebirdSchema.FirebirdDataType;
 import sqlancer.firebird.FirebirdSchema.FirebirdTable;
 import sqlancer.firebird.FirebirdSchema.FirebirdTables;
 import sqlancer.firebird.ast.FirebirdExpression;
+import sqlancer.firebird.ast.FirebirdJoin;
 import sqlancer.firebird.ast.FirebirdSelect;
 
 public final class FirebirdRandomQuerySynthesizer {
@@ -33,13 +34,14 @@ public final class FirebirdRandomQuerySynthesizer {
         List<FirebirdTable> tables = targetTables.getTables();
         List<TableReferenceNode<FirebirdExpression, FirebirdTable>> tableList = tables.stream()
                 .map(t -> new TableReferenceNode<FirebirdExpression, FirebirdTable>(t)).collect(Collectors.toList());
-
+        List<Node<FirebirdExpression>> joins = FirebirdJoin.getJoins(tableList, globalState);
+        select.setJoinList(joins.stream().collect(Collectors.toList()));
         select.setFromList(tableList.stream().collect(Collectors.toList()));
         select.setDistinct(Randomly.getBoolean());
         if (Randomly.getBoolean()) {
             select.setWhereClause(gen.generatePredicate());
         }
-        // TODO: add Order By, Group By, Joins, Limit (think this is called ROWS in Firebird)
+        // TODO: add Order By, Group By, Limit (think this is called ROWS in Firebird)
 
         return select;
     }

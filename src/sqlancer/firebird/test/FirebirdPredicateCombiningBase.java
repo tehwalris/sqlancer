@@ -26,6 +26,7 @@ import sqlancer.firebird.FirebirdSchema.FirebirdTable;
 import sqlancer.firebird.FirebirdSchema.FirebirdTables;
 import sqlancer.firebird.FirebirdToStringVisitor;
 import sqlancer.firebird.ast.FirebirdExpression;
+import sqlancer.firebird.ast.FirebirdJoin;
 import sqlancer.firebird.ast.FirebirdSelect;
 import sqlancer.firebird.gen.FirebirdExpressionGenerator;
 import sqlancer.firebird.gen.FirebirdExpressionGenerator.FirebirdBinaryLogicalOperator;
@@ -37,6 +38,7 @@ public class FirebirdPredicateCombiningBase
     FirebirdTables targetTables;
     FirebirdExpressionGenerator gen;
     List<FirebirdKnownPredicate> knownPredicates;
+    FirebirdSelect select;
     int numColumns;
     int maxPredicateDepth;
 
@@ -54,13 +56,14 @@ public class FirebirdPredicateCombiningBase
         gen = new FirebirdExpressionGenerator(state, 1).setColumns(targetTables.getColumns());
         List<Node<FirebirdExpression>> fetchColumns = generateFetchColumns();
         initializeInternalTables(state.getDmbsSpecificOptions().numOraclePredicates, numColumns);
-        List<Node<FirebirdExpression>> tableList = targetTables.getTables().stream()
+        List<TableReferenceNode<FirebirdExpression, FirebirdTable>> tableList = targetTables.getTables().stream()
                 .map(t -> new TableReferenceNode<FirebirdExpression, FirebirdTable>(t)).collect(Collectors.toList());
+        List<Node<FirebirdExpression>> joins = FirebirdJoin.getJoins(tableList, state);
 
         {
             FirebirdSelect select = new FirebirdSelect();
-            // TODO: Add joins to select statement
-            select.setFromList(tableList);
+            select.setJoinList(joins.stream().collect(Collectors.toList()));
+            select.setFromList(tableList.stream().collect(Collectors.toList()));
             select.setFetchColumns(fetchColumns);
             List<Node<FirebirdExpression>> allColumns = Stream.concat(fetchColumns.stream(), predicates.stream()).collect(Collectors.toList());
             select.setFetchColumns(allColumns);
@@ -77,7 +80,8 @@ public class FirebirdPredicateCombiningBase
         String combinedQueryString;
         {
             FirebirdSelect select = new FirebirdSelect();
-            select.setFromList(tableList);
+            select.setJoinList(joins.stream().collect(Collectors.toList()));
+            select.setFromList(tableList.stream().collect(Collectors.toList()));
             select.setFetchColumns(fetchColumns);
             select.setWhereClause(combinedPredicate.getExpression());
 
@@ -127,7 +131,6 @@ public class FirebirdPredicateCombiningBase
         return gen;
     }
 
-    // TODO: maybe refactor s.t. this can be done in PredicateCombiningOracleBase
     protected FirebirdKnownPredicate getCombinedPredicate() {
         return internalPredicateCombination(0);
     }
