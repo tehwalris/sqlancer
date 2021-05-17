@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 
 import org.firebirdsql.jdbc.FBConnection;
 
-import sqlancer.ComparatorHelper;
 import sqlancer.Randomly;
 import sqlancer.common.ast.newast.ColumnReferenceNode;
 import sqlancer.common.ast.newast.Node;
@@ -51,7 +50,11 @@ public class FirebirdPredicateCombiningBase
 
     @Override
     public void check() throws SQLException {
-        s = state.getSchema();
+    	if (Randomly.getBooleanWithRatherLowProbability()) {
+        	freePreparedStatements();
+        }
+    	
+    	s = state.getSchema();
         targetTables = s.getRandomTableNonEmptyTables();
         gen = new FirebirdExpressionGenerator(state, 1).setColumns(targetTables.getColumns());
         List<Node<FirebirdExpression>> fetchColumns = generateFetchColumns();
@@ -59,57 +62,19 @@ public class FirebirdPredicateCombiningBase
         List<TableReferenceNode<FirebirdExpression, FirebirdTable>> tableList = targetTables.getTables().stream()
                 .map(t -> new TableReferenceNode<FirebirdExpression, FirebirdTable>(t)).collect(Collectors.toList());
         List<Node<FirebirdExpression>> joins = FirebirdJoin.getJoins(tableList, state);
-
-        {
-            FirebirdSelect select = new FirebirdSelect();
-            select.setJoinList(joins.stream().collect(Collectors.toList()));
-            select.setFromList(tableList.stream().collect(Collectors.toList()));
-            select.setFetchColumns(fetchColumns);
-            List<Node<FirebirdExpression>> allColumns = Stream.concat(fetchColumns.stream(), predicates.stream()).collect(Collectors.toList());
-            select.setFetchColumns(allColumns);
-            generateTables(FirebirdToStringVisitor.asString(select), numColumns, state.getDmbsSpecificOptions().numOraclePredicates);
-        }
+        select = new FirebirdSelect();
+        select.setJoinList(joins.stream().collect(Collectors.toList()));
+        select.setFromList(tableList.stream().collect(Collectors.toList()));
+        List<Node<FirebirdExpression>> allColumns = Stream.concat(fetchColumns.stream(), predicates.stream()).collect(Collectors.toList());
+        select.setFetchColumns(allColumns);
+        generateTables(FirebirdToStringVisitor.asString(select), numColumns, state.getDmbsSpecificOptions().numOraclePredicates);
         
         knownPredicates = new ArrayList<>();
         for (int i = 0; i < predicates.size(); i++) {
             knownPredicates.add(new FirebirdKnownPredicate(predicates.get(i), predicateEvaluations.get(i)));
         }
-
-        FirebirdKnownPredicate combinedPredicate = getCombinedPredicate();
-
-        String combinedQueryString;
-        {
-            FirebirdSelect select = new FirebirdSelect();
-            select.setJoinList(joins.stream().collect(Collectors.toList()));
-            select.setFromList(tableList.stream().collect(Collectors.toList()));
-            select.setFetchColumns(fetchColumns);
-            select.setWhereClause(combinedPredicate.getExpression());
-
-            combinedQueryString = FirebirdToStringVisitor.asString(select);
-        }
-        List<String> resultSet = ComparatorHelper.getResultSetFirstColumnAsString(combinedQueryString, errors, state);
-
-        List<String> expectedResultSet = getFirstColumnFilteredByExpectedResults(tableContent,
-                combinedPredicate.getExpectedResults());
-        ComparatorHelper.assumeResultSetsAreEqual(resultSet, expectedResultSet, combinedQueryString, new ArrayList<>(),
-                state);
-
-        // HACK Firebird does not free prepared statements until the connection is
-        // closed.
-        // We could not find a method or configuration option to free prepared
-        // statements "correctly",
-        // so this frees them all occasionally.
-        if (Randomly.getBooleanWithRatherLowProbability()) {
-            try {
-                FBConnection connection = ((FBConnection) state.getConnection().getConnection());
-                Method freeStatements = connection.getClass().getDeclaredMethod("freeStatements");
-                freeStatements.setAccessible(true);
-                freeStatements.invoke(connection);
-            } catch (Exception e) {
-                System.out.println(e);
-                throw new RuntimeException("failed to free prepared statements");
-            }
-        }
+        
+        select.setFetchColumns(fetchColumns);
     }
 
     List<Node<FirebirdExpression>> generateFetchColumns() {
@@ -152,4 +117,23 @@ public class FirebirdPredicateCombiningBase
                     FirebirdBinaryLogicalOperator.getRandom());
         }
     }
+    
+    /** HACK Firebird does not free prepared statements until the connection is
+      * closed.
+      * We could not find a method or configuration option to free prepared
+      * statements "correctly",
+      * so this frees them all occasionally.
+      */
+    private void freePreparedStatements() throws SQLException {
+    	try {
+            FBConnection connection = ((FBConnection) state.getConnection().getConnection());
+            Method freeStatements = connection.getClass().getDeclaredMethod("freeStatements");
+            freeStatements.setAccessible(true);
+            freeStatements.invoke(connection);
+        } catch (Exception e) {
+            System.out.println(e);
+            throw new RuntimeException("failed to free prepared statements");
+        }
+    }
+    
 }
