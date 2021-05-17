@@ -54,7 +54,7 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
         case INSERT:
             return rand.getInteger(0, globalState.getOptions().getMaxNumberInserts() + 1);
         case CREATE_INDEX:
-            return globalState.getDmbsSpecificOptions().testIndexes
+        	return globalState.getDmbsSpecificOptions().testIndexes
                     ? rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumIndexes + 1) : 0;
         case DELETE:
             return rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumDeletes + 1);
@@ -92,24 +92,6 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
                 });
         se.executeStatements();
     }
-    
-    @Override
-    public void generateAndTestDatabase(FirebirdGlobalState globalState) throws Exception {
-    	ExpectedErrors errors = new ExpectedErrors();
-    	FirebirdErrors.addUnstableErrors(errors);
-    	
-    	try {
-    		super.generateAndTestDatabase(globalState);
-    	} catch (Exception e) {
-    		if (e instanceof IgnoreMeException) {
-    			throw e;
-    		}
-    		if (errors.errorIsExpected(e.getMessage())) {
-    			throw new IgnoreMeException();
-    		}
-    		throw new AssertionError(e);
-    	}
-    }
 
     @Override
     public SQLConnection createDatabase(FirebirdGlobalState globalState) throws Exception {
@@ -129,16 +111,8 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
         if (manager.isDatabaseExists(databaseName, username, password)) {
             manager.dropDatabase(databaseName, username, password);
         }
-        try {
-        	manager.createDatabase(databaseName, username, password);
-        } catch (Exception e) {
-        	if (errors.errorIsExpected(e.getMessage())) {
-        		throw new IgnoreMeException();
-        	}
-        	throw new AssertionError(e);
-        } finally {
-        	manager.stop();
-        }
+        manager.createDatabase(databaseName, username, password);
+        manager.stop();
 
         String url = String.format("jdbc:firebirdsql://%s:%d/%s?charSet=utf-8", host, port, databaseName);
         return new SQLConnection(DriverManager.getConnection(url, username, password));
