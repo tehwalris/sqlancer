@@ -45,10 +45,7 @@ public final class FirebirdErrors {
     }
 
     public static void addUnstableErrors(ExpectedErrors errors) {
-        errors.add("too many open handles to database");
         errors.add("Error writing data to the connection.");
         errors.add("Error reading data from the connection.");
-        errors.add("Connection reset by peer: socket write error");
-        errors.add("invalid request handle");
     }
 }
