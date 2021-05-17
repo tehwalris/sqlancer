@@ -43,6 +43,10 @@ public final class FirebirdErrors {
     public static void addIndexErrors(ExpectedErrors errors) {
         errors.add("attempt to store duplicate value (visible to active transactions) in unique index");
     }
+    
+    public static void addOrderByErrors(ExpectedErrors errors) {
+    	errors.add("Invalid column position used in the ORDER BY clause");
+    }
 
     public static void addUnstableErrors(ExpectedErrors errors) {
         errors.add("Error writing data to the connection.");

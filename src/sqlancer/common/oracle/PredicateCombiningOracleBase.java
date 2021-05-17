@@ -2,6 +2,7 @@ package sqlancer.common.oracle;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import sqlancer.IgnoreMeException;
@@ -119,6 +120,26 @@ public abstract class PredicateCombiningOracleBase<E, S extends SQLGlobalState<?
             output.add(fullOutput.get(0).get(i));
         }
         return output;
+    }
+    
+    protected static List<String> getExpectedResultsNoDuplicatesFirstColumn(List<List<String>> tableContent,
+    		List<Boolean> expectedResults) {
+    	List<List<String>> fullOutput = getExpectedResults(tableContent, expectedResults);
+    	int numRows = fullOutput.get(0).size();
+    	int numColumns = fullOutput.size();
+    	HashSet<List<String>> distinctRows = new HashSet<List<String>>();
+    	for (int i = 0; i < numRows; i++) {
+    		List<String> row = new ArrayList<>();
+    		for (int j = 0; j < numColumns; j++) {
+    			row.add(fullOutput.get(j).get(i));
+    		}
+    		distinctRows.add(row);
+    	}
+    	List<String> output = new ArrayList<>();
+    	for (List<String> row : distinctRows) {
+    		output.add(row.get(0));
+    	}
+    	return output;
     }
 
     protected static List<List<String>> getExpectedResults(List<List<String>> tableContent,

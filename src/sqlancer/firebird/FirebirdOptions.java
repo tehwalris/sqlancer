@@ -14,6 +14,7 @@ import sqlancer.common.oracle.CompositeTestOracle;
 import sqlancer.common.oracle.TestOracle;
 import sqlancer.firebird.FirebirdOptions.FirebirdOracleFactory;
 import sqlancer.firebird.FirebirdProvider.FirebirdGlobalState;
+import sqlancer.firebird.test.FirebirdPredicateCombiningDistinctTester;
 import sqlancer.firebird.test.FirebirdPredicateCombiningWhereTester;
 
 @Parameters
@@ -71,6 +72,7 @@ public class FirebirdOptions implements DBMSSpecificOptions<FirebirdOracleFactor
             public TestOracle create(FirebirdGlobalState globalState) throws SQLException {
                 List<TestOracle> oracles = new ArrayList<>();
                 oracles.add(new FirebirdPredicateCombiningWhereTester(globalState));
+                oracles.add(new FirebirdPredicateCombiningDistinctTester(globalState));
                 return new CompositeTestOracle(oracles, globalState);
             }
         };
