@@ -16,26 +16,26 @@ public class FirebirdToStringVisitor extends NewToStringVisitor<FirebirdExpressi
         } else if (expr instanceof FirebirdSelect) {
             visit((FirebirdSelect) expr);
         } else if (expr instanceof FirebirdJoin) {
-        	visit((FirebirdJoin) expr);
+            visit((FirebirdJoin) expr);
         } else {
             throw new AssertionError(expr.getClass());
         }
     }
-    
+
     private void visit(FirebirdJoin join) {
-    	visit(join.getLeftTable());
-    	sb.append(" ");
-    	sb.append(join.getJoinType());
-    	sb.append(" ");
-    	if (join.getOuterType() != null) {
-    		sb.append(join.getOuterType());
-    	}
-    	sb.append(" JOIN ");
-    	visit(join.getRightTable());
-    	if (join.getOnCondition() != null) {
-    		sb.append(" ON ");
-    		visit(join.getOnCondition());
-    	}
+        visit(join.getLeftTable());
+        sb.append(" ");
+        sb.append(join.getJoinType());
+        sb.append(" ");
+        if (join.getOuterType() != null) {
+            sb.append(join.getOuterType());
+        }
+        sb.append(" JOIN ");
+        visit(join.getRightTable());
+        if (join.getOnCondition() != null) {
+            sb.append(" ON ");
+            visit(join.getOnCondition());
+        }
     }
 
     private void visit(FirebirdConstant constant) {
@@ -51,22 +51,22 @@ public class FirebirdToStringVisitor extends NewToStringVisitor<FirebirdExpressi
         sb.append(" FROM ");
         visit(select.getFromList());
         if (!select.getFromList().isEmpty() && !select.getJoinList().isEmpty()) {
-        	sb.append(", ");
+            sb.append(", ");
         }
         if (!select.getJoinList().isEmpty()) {
-        	visit(select.getJoinList());
+            visit(select.getJoinList());
         }
         if (select.getWhereClause() != null) {
             sb.append(" WHERE ");
             visit(select.getWhereClause());
         }
         if (!select.getOrderByExpressions().isEmpty()) {
-        	sb.append(" ORDER BY ");
-        	visit(select.getOrderByExpressions());
+            sb.append(" ORDER BY ");
+            visit(select.getOrderByExpressions());
         }
         if (select.getLimitClause() != null) {
-        	sb.append(" ROWS ");
-        	visit(select.getLimitClause());
+            sb.append(" ROWS ");
+            visit(select.getLimitClause());
         }
     }
 

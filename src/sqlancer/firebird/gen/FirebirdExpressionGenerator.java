@@ -187,20 +187,19 @@ public final class FirebirdExpressionGenerator
     public Node<FirebirdExpression> isNull(Node<FirebirdExpression> expr) {
         return new NewUnaryPostfixOperatorNode<>(expr, FirebirdUnaryPostfixOperator.IS_NULL);
     }
-    
+
     @Override
     public List<Node<FirebirdExpression>> generateOrderBys() {
-    	List<Node<FirebirdExpression>> expr = super.generateOrderBys();
-    	List<Node<FirebirdExpression>> newExpr = new ArrayList<>(expr.size());
-    	for (Node<FirebirdExpression> curExpr : expr) {
-    		if (Randomly.getBoolean()) {
-    			curExpr = new NewOrderingTerm<>(curExpr, Ordering.getRandom());
-    		}
-    		newExpr.add(curExpr);
-    	}
-    	return newExpr;
+        List<Node<FirebirdExpression>> expr = super.generateOrderBys();
+        List<Node<FirebirdExpression>> newExpr = new ArrayList<>(expr.size());
+        for (Node<FirebirdExpression> curExpr : expr) {
+            if (Randomly.getBoolean()) {
+                curExpr = new NewOrderingTerm<>(curExpr, Ordering.getRandom());
+            }
+            newExpr.add(curExpr);
+        }
+        return newExpr;
     }
-    
 
     public enum FirebirdUnaryPrefixOperator implements Operator {
 

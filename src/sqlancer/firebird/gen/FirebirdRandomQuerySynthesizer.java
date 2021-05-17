@@ -43,12 +43,13 @@ public final class FirebirdRandomQuerySynthesizer {
             select.setWhereClause(gen.generatePredicate());
         }
         if (Randomly.getBoolean()) {
-        	select.setLimitClause(FirebirdConstant.createIntConstant(Randomly.getNotCachedInteger(0, Integer.MAX_VALUE)));
+            select.setLimitClause(
+                    FirebirdConstant.createIntConstant(Randomly.getNotCachedInteger(0, Integer.MAX_VALUE)));
         }
         if (Randomly.getBoolean()) {
-        	select.setOrderByExpressions(gen.generateOrderBys());
+            select.setOrderByExpressions(gen.generateOrderBys());
         }
-        
+
         // TODO: add Group By, Having clause
 
         return select;

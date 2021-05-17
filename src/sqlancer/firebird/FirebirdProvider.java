@@ -54,7 +54,7 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
         case INSERT:
             return rand.getInteger(0, globalState.getOptions().getMaxNumberInserts() + 1);
         case CREATE_INDEX:
-        	return globalState.getDmbsSpecificOptions().testIndexes
+            return globalState.getDmbsSpecificOptions().testIndexes
                     ? rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumIndexes + 1) : 0;
         case DELETE:
             return rand.getInteger(0, globalState.getDmbsSpecificOptions().maxNumDeletes + 1);
@@ -103,7 +103,7 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
 
         ExpectedErrors errors = new ExpectedErrors();
         FirebirdErrors.addUnstableErrors(errors);
-        
+
         FBManager manager = new FBManager();
         manager.setUserName(username);
         manager.setPassword(password);
