@@ -19,8 +19,6 @@ import sqlancer.firebird.test.FirebirdPredicateCombiningWhereTester;
 @Parameters
 public class FirebirdOptions implements DBMSSpecificOptions<FirebirdOracleFactory> {
 
-    // TODO: add options here
-
     @Parameter(names = "--host", description = "Specifies the host for connecting to the Firebird Server", arity = 1)
     public String host = "localhost";
 

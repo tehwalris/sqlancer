@@ -111,19 +111,14 @@ public abstract class PredicateCombiningOracleBase<E, S extends SQLGlobalState<?
     }
 
     protected static List<String> getFirstColumnFilteredByExpectedResults(List<List<String>> tableContent, List<Boolean> expectedResults) {
-        try {
-            List<String> output = new ArrayList<>();
-            for (int i = 0; i < tableContent.get(0).size(); i++) {
-                assert tableContent.get(i).size() == expectedResults.size();
-                if (expectedResults.get(i) != null && expectedResults.get(i)) {
-                    output.add(tableContent.get(0).get(i));
-                }
+        List<String> output = new ArrayList<>();
+        for (int i = 0; i < tableContent.get(0).size(); i++) {
+            assert tableContent.get(i).size() == expectedResults.size();
+            if (expectedResults.get(i) != null && expectedResults.get(i)) {
+                output.add(tableContent.get(0).get(i));
             }
-            return output;
-        } catch(Exception exception) {
-            System.out.print("DEBUG");
-            System.out.println(expectedResults.size());
-            throw exception;
         }
+        return output;
     }
+
 }
