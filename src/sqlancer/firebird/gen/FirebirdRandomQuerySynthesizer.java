@@ -11,6 +11,7 @@ import sqlancer.firebird.FirebirdProvider.FirebirdGlobalState;
 import sqlancer.firebird.FirebirdSchema.FirebirdDataType;
 import sqlancer.firebird.FirebirdSchema.FirebirdTable;
 import sqlancer.firebird.FirebirdSchema.FirebirdTables;
+import sqlancer.firebird.ast.FirebirdConstant;
 import sqlancer.firebird.ast.FirebirdExpression;
 import sqlancer.firebird.ast.FirebirdJoin;
 import sqlancer.firebird.ast.FirebirdSelect;
@@ -41,7 +42,14 @@ public final class FirebirdRandomQuerySynthesizer {
         if (Randomly.getBoolean()) {
             select.setWhereClause(gen.generatePredicate());
         }
-        // TODO: add Order By, Group By, Limit (think this is called ROWS in Firebird)
+        if (Randomly.getBoolean()) {
+        	select.setLimitClause(FirebirdConstant.createIntConstant(Randomly.getNotCachedInteger(0, Integer.MAX_VALUE)));
+        }
+        if (Randomly.getBoolean()) {
+        	select.setOrderByExpressions(gen.generateOrderBys());
+        }
+        
+        // TODO: add Group By, Having clause
 
         return select;
     }

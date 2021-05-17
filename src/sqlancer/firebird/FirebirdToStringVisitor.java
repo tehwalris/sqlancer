@@ -60,6 +60,14 @@ public class FirebirdToStringVisitor extends NewToStringVisitor<FirebirdExpressi
             sb.append(" WHERE ");
             visit(select.getWhereClause());
         }
+        if (!select.getOrderByExpressions().isEmpty()) {
+        	sb.append(" ORDER BY ");
+        	visit(select.getOrderByExpressions());
+        }
+        if (select.getLimitClause() != null) {
+        	sb.append(" ROWS ");
+        	visit(select.getLimitClause());
+        }
     }
 
     public static String asString(Node<FirebirdExpression> expr) {

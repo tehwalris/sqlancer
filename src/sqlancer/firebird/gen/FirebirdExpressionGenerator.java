@@ -1,5 +1,6 @@
 package sqlancer.firebird.gen;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,6 +9,8 @@ import sqlancer.Randomly;
 import sqlancer.common.ast.BinaryOperatorNode.Operator;
 import sqlancer.common.ast.newast.ColumnReferenceNode;
 import sqlancer.common.ast.newast.NewBinaryOperatorNode;
+import sqlancer.common.ast.newast.NewOrderingTerm;
+import sqlancer.common.ast.newast.NewOrderingTerm.Ordering;
 import sqlancer.common.ast.newast.NewUnaryPostfixOperatorNode;
 import sqlancer.common.ast.newast.NewUnaryPrefixOperatorNode;
 import sqlancer.common.ast.newast.Node;
@@ -184,6 +187,20 @@ public final class FirebirdExpressionGenerator
     public Node<FirebirdExpression> isNull(Node<FirebirdExpression> expr) {
         return new NewUnaryPostfixOperatorNode<>(expr, FirebirdUnaryPostfixOperator.IS_NULL);
     }
+    
+    @Override
+    public List<Node<FirebirdExpression>> generateOrderBys() {
+    	List<Node<FirebirdExpression>> expr = super.generateOrderBys();
+    	List<Node<FirebirdExpression>> newExpr = new ArrayList<>(expr.size());
+    	for (Node<FirebirdExpression> curExpr : expr) {
+    		if (Randomly.getBoolean()) {
+    			curExpr = new NewOrderingTerm<>(curExpr, Ordering.getRandom());
+    		}
+    		newExpr.add(curExpr);
+    	}
+    	return newExpr;
+    }
+    
 
     public enum FirebirdUnaryPrefixOperator implements Operator {
 
