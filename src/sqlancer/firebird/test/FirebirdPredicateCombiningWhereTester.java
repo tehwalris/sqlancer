@@ -1,8 +1,8 @@
 package sqlancer.firebird.test;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import sqlancer.ComparatorHelper;
 import sqlancer.firebird.FirebirdToStringVisitor;
@@ -18,15 +18,18 @@ public class FirebirdPredicateCombiningWhereTester extends FirebirdPredicateComb
     @Override
     public void check() throws SQLException {
         super.check();
-        
+
         FirebirdKnownPredicate combinedPredicate = getCombinedPredicate();
         select.setWhereClause(combinedPredicate.getExpression());
         String combinedQueryString = FirebirdToStringVisitor.asString(select);
-        
+        List<String> predicateStrings = predicates.stream().map(e -> FirebirdToStringVisitor.asString(e))
+                .collect(Collectors.toList());
+
         List<String> resultSet = ComparatorHelper.getResultSetFirstColumnAsString(combinedQueryString, errors, state);
-        List<String> expectedResultSet = getFirstColumnFilteredByExpectedResults(tableContent,
-        		combinedPredicate.getExpectedResults());
-        ComparatorHelper.assumeResultSetsAreEqual(resultSet, expectedResultSet, combinedQueryString, new ArrayList<>(), state);
-        
+        List<String> expectedResultSet = getExpectedResultsFirstColumn(tableContent,
+                combinedPredicate.getExpectedResults());
+        ComparatorHelper.assumeResultSetsAreEqual(expectedResultSet, resultSet, combinedQueryString, predicateStrings,
+                state);
+
     }
 }

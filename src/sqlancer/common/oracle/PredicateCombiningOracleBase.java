@@ -67,7 +67,7 @@ public abstract class PredicateCombiningOracleBase<E, S extends SQLGlobalState<?
                 for (int i = 1; i <= numColumns; i++) {
                     tableContent.get(i - 1).add(result.getString(i));
                 }
-                for (int i  = 1; i <= numPredicates; i++) {
+                for (int i = 1; i <= numPredicates; i++) {
                     String predicate = result.getString(numColumns + i);
                     predicateEvaluations.get(i - 1).add(predicateEvaluationToBoolean(predicate));
                 }
@@ -110,12 +110,30 @@ public abstract class PredicateCombiningOracleBase<E, S extends SQLGlobalState<?
         }
     }
 
-    protected static List<String> getFirstColumnFilteredByExpectedResults(List<List<String>> tableContent, List<Boolean> expectedResults) {
+    protected static List<String> getExpectedResultsFirstColumn(List<List<String>> tableContent,
+            List<Boolean> expectedResults) {
+        List<List<String>> fullOutput = getExpectedResults(tableContent, expectedResults);
+        int numRows = fullOutput.get(0).size();
         List<String> output = new ArrayList<>();
-        for (int i = 0; i < tableContent.get(0).size(); i++) {
-            assert tableContent.get(i).size() == expectedResults.size();
+        for (int i = 0; i < numRows; i++) {
+            output.add(fullOutput.get(0).get(i));
+        }
+        return output;
+    }
+
+    protected static List<List<String>> getExpectedResults(List<List<String>> tableContent,
+            List<Boolean> expectedResults) {
+        int numRows = expectedResults.size();
+        int numColumns = tableContent.size();
+        List<List<String>> output = new ArrayList<>();
+        for (int i = 0; i < numColumns; i++) {
+            output.add(new ArrayList<>());
+        }
+        for (int i = 0; i < numRows; i++) {
             if (expectedResults.get(i) != null && expectedResults.get(i)) {
-                output.add(tableContent.get(0).get(i));
+                for (int j = 0; j < numColumns; j++) {
+                    output.get(j).add(tableContent.get(j).get(i));
+                }
             }
         }
         return output;
