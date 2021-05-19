@@ -67,6 +67,12 @@ public class FirebirdOptions implements DBMSSpecificOptions<FirebirdOracleFactor
                 return new FirebirdPredicateCombiningWhereTester(globalState);
             }
         },
+        DISTINCT {
+        	@Override
+        	public TestOracle create(FirebirdGlobalState globalState) throws SQLException {
+        		return new FirebirdPredicateCombiningDistinctTester(globalState);
+        	}
+        },
         PREDICATE_COMBINING {
             @Override
             public TestOracle create(FirebirdGlobalState globalState) throws SQLException {
