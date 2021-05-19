@@ -90,7 +90,14 @@ public abstract class PredicateCombiningOracleBase<E, S extends SQLGlobalState<?
             throw new AssertionError(queryString, e);
         } finally {
             if (result != null && !result.isClosed()) {
-                result.close();
+            	try {
+            		result.close();
+            	} catch (Exception e) {
+            		if (e.getMessage() != null && errors.errorIsExpected(e.getMessage())) {
+            			throw new IgnoreMeException();
+            		}
+            		throw e;
+            	}
             }
         }
     }

@@ -29,7 +29,7 @@ public class FirebirdPredicateCombiningDistinctTester extends FirebirdPredicateC
 		List<String> resultSet = ComparatorHelper.getResultSetFirstColumnAsString(combinedQueryString, errors, state);
 		List<String> expectedResultSet = getExpectedResultsNoDuplicatesFirstColumn(tableContent,
 				combinedPredicate.getExpectedResults());
-		ComparatorHelper.assumeResultSetsAreEqual(expectedResultSet, resultSet, combinedQueryString, predicateStrings, 
+		ComparatorHelper.assumeResultSetsAreEqual(resultSet, expectedResultSet, combinedQueryString, predicateStrings, 
 				state);
 	}
 }

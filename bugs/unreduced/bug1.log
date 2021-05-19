@@ -1,0 +1,48 @@
+--java.lang.AssertionError: the size of the result sets mismatch (0 and 1)!
+---- SELECT DISTINCT T1.C0 FROM T1 WHERE (NOT ((T1.C0)!=(0.06455164008088665)));
+---- cardinality: 0
+---- (NOT ((true) IS NOT UNKNOWN));(((NOT false))AND(((T1.C0)LIKE(T1.C0))));(((- 1475015074))<=(T1.C0));false;(NOT ((T1.C0)!=(0.06455164008088665)));((((false)AND(true)))OR(((false)AND(true))));((((T1.C0)>=(0.404539512925819)))AND((NOT true)));((((T1.C0)NOT LIKE(T1.C0)))AND((NOT true)));(((NOT true))OR(((T1.C0)<(T1.C0))));((((false)OR(true)))OR(((T1.C0)!=(T1.C0))));
+---- cardinality: 1
+--	at sqlancer.ComparatorHelper.assumeResultSetsAreEqual(ComparatorHelper.java:94)
+--	at sqlancer.firebird.test.FirebirdPredicateCombiningDistinctTester.check(FirebirdPredicateCombiningDistinctTester.java:32)
+--	at sqlancer.common.oracle.CompositeTestOracle.check(CompositeTestOracle.java:21)
+--	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:49)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:101)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:1)
+--	at sqlancer.Main$DBMSExecutor.run(Main.java:324)
+--	at sqlancer.Main$2.run(Main.java:508)
+--	at sqlancer.Main$2.runThread(Main.java:486)
+--	at sqlancer.Main$2.run(Main.java:476)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+--	at java.base/java.lang.Thread.run(Thread.java:834)
+---- Time: 2021/05/19 10:59:07
+-- Database: database2
+-- Database version: WI-V3.0.7.33374
+-- seed value: 1621414324274
+CREATE TABLE t0(c0 INTEGER DEFAULT 1842847092, c1 FLOAT);
+CREATE TABLE t1(c0 FLOAT, PRIMARY KEY(c0));
+INSERT INTO T0 (C0) VALUES (2048466263);
+INSERT INTO T1 (C0) VALUES (0.06455164008088665);
+INSERT INTO T1 (C0) VALUES (0.5837469671190794);
+UPDATE T1 SET C0=0.8831008244003552;
+UPDATE T0 SET C0=397212299;
+INSERT INTO T0 (C0) VALUES (-433039687);
+CREATE UNIQUE INDEX i0 ON T1(C0);
+INSERT INTO T0 (C0, C1) VALUES (1599693562, 0.24948692603877387);
+INSERT INTO T1 (C0) VALUES (0.10421309111047705);
+INSERT INTO T0 (C0, C1) VALUES (827957695, 0.897420457617919);
+UPDATE T0 SET C1=0.5558651145036811, C0=814323190;
+UPDATE T0 SET C0=445909101;
+UPDATE T1 SET C0=-1.442158101E9;
+UPDATE T0 SET C1=6.01968838E8, C0=-2086082832;
+DELETE FROM T0 WHERE (((+ ((((T0.C1)*(T0.C1)))*(((T0.C1)*(-9.57548014E8))))))NOT LIKE(((((((T0.C0)-(T0.C0)))/(((T0.C0)*(T0.C0)))))-((+ (+ T0.C1))))));
+INSERT INTO T0 (C1) VALUES (0.7943882962952817);
+INSERT INTO T0 (C0) VALUES (-542783795);
+INSERT INTO T0 (C1) VALUES (0.05439006173486216);
+UPDATE T1 SET C0=0.0638240927258984;
+UPDATE T0 SET C0=-501962234, C1=0.3516740622849617;
+-- SELECT DISTINCT T1.C0 FROM T1 WHERE (NOT ((T1.C0)!=(0.06455164008088665)));
+-- cardinality: 0
+-- (NOT ((true) IS NOT UNKNOWN));(((NOT false))AND(((T1.C0)LIKE(T1.C0))));(((- 1475015074))<=(T1.C0));false;(NOT ((T1.C0)!=(0.06455164008088665)));((((false)AND(true)))OR(((false)AND(true))));((((T1.C0)>=(0.404539512925819)))AND((NOT true)));((((T1.C0)NOT LIKE(T1.C0)))AND((NOT true)));(((NOT true))OR(((T1.C0)<(T1.C0))));((((false)OR(true)))OR(((T1.C0)!=(T1.C0))));
+-- cardinality: 1

@@ -1,0 +1,62 @@
+--java.lang.AssertionError: the size of the result sets mismatch (41 and 43)!
+---- SELECT DISTINCT T0.C0, T53.C0, T0.C1, T53.C2, T53.C1 FROM T53, T0 WHERE (((NOT (((NOT (((- T53.C1)) IS NULL)))OR((NOT ((((T53.C2)OR(T53.C2)))<(((DATE '1969-12-17') IS NOT NULL))))))))OR((NOT (((NOT ((((true) IS TRUE))OR(((T53.C0)!=(T0.C1))))))OR((NOT (((+ T0.C0))<=(T53.C0))))))));
+---- cardinality: 41
+---- (((- T53.C1)) IS NULL);((((T0.C1)LIKE(T53.C0)))OR(((T53.C2)OR(T53.C2))));((((T0.C0)LIKE(T0.C0)))<(((T53.C2)AND(T53.C2))));(NOT (NOT true));((((true) IS TRUE))OR(((T53.C0)!=(T0.C1))));(((NOT true))>((NOT T53.C2)));((((T53.C1)>(T0.C0))) IS TRUE);((((T53.C2)OR(T53.C2)))<(((DATE '1969-12-17') IS NOT NULL)));(((NOT T53.C2)) IS FALSE);(((+ T0.C0))<=(T53.C0));
+---- cardinality: 43
+--	at sqlancer.ComparatorHelper.assumeResultSetsAreEqual(ComparatorHelper.java:94)
+--	at sqlancer.firebird.test.FirebirdPredicateCombiningDistinctTester.check(FirebirdPredicateCombiningDistinctTester.java:32)
+--	at sqlancer.common.oracle.CompositeTestOracle.check(CompositeTestOracle.java:21)
+--	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:49)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:101)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:1)
+--	at sqlancer.Main$DBMSExecutor.run(Main.java:324)
+--	at sqlancer.Main$2.run(Main.java:508)
+--	at sqlancer.Main$2.runThread(Main.java:486)
+--	at sqlancer.Main$2.run(Main.java:476)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+--	at java.base/java.lang.Thread.run(Thread.java:834)
+---- Time: 2021/05/19 10:52:12
+-- Database: database0
+-- Database version: WI-V3.0.7.33374
+-- seed value: 1621414324272
+CREATE TABLE t0(c0 FLOAT, c1 INTEGER, PRIMARY KEY(c0, c1));
+CREATE TABLE t53(c0 INTEGER, c1 FLOAT UNIQUE, c2 BOOLEAN);
+INSERT INTO T0 (C0) VALUES (0.9528642678928111);
+INSERT INTO T53 (C0) VALUES (-2045693242);
+INSERT INTO T0 (C1) VALUES (1363898478);
+INSERT INTO T53 (C2) VALUES (true);
+INSERT INTO T53 (C2, C1, C0) VALUES (true, 0.820376691868957, -1929827331);
+INSERT INTO T53 (C1, C2, C0) VALUES (0.35414365378461965, false, -1929827331);
+INSERT INTO T53 (C2, C1, C0) VALUES (false, 0.2546000779535752, -2045693242);
+INSERT INTO T0 (C0, C1) VALUES (-2.045693242E9, -1929827331);
+INSERT INTO T0 (C0, C1) VALUES (0.5485292616393891, -824893853);
+INSERT INTO T53 DEFAULT VALUES;
+INSERT INTO T53 (C0, C1, C2) VALUES (-918446414, -9.18446414E8, true);
+INSERT INTO T0 (C1) VALUES (-824893853);
+INSERT INTO T0 (C0) VALUES (0.8543219525725656);
+INSERT INTO T0 (C0, C1) VALUES (0.9528642678928111, 1858416307);
+INSERT INTO T0 (C0, C1) VALUES (0.07822766233033451, 783999778);
+INSERT INTO T53 (C2, C1) VALUES (true, 1.363898478E9);
+INSERT INTO T53 (C2) VALUES (true);
+INSERT INTO T53 (C2, C1, C0) VALUES (false, 0.6275798106077108, 1244686802);
+INSERT INTO T53 (C0, C1) VALUES (1858416307, 0.9119686660992363);
+INSERT INTO T53 (C2, C1, C0) VALUES (false, 1.858416307E9, -211832391);
+INSERT INTO T0 (C0) VALUES (0.7361543826482297);
+INSERT INTO T0 (C0) VALUES (0.7235768511180422);
+INSERT INTO T53 (C2, C0, C1) VALUES (true, -349561895, 0.5683790323974652);
+INSERT INTO T53 (C0, C1) VALUES (-211832391, 0.6275798106077108);
+INSERT INTO T53 (C0) VALUES (783999778);
+INSERT INTO T53 (C0, C2) VALUES (1244686802, true);
+INSERT INTO T0 (C0) VALUES (0.2709165779289584);
+INSERT INTO T0 (C0, C1) VALUES (0.43905124863240597, 189347742);
+INSERT INTO T53 (C1) VALUES (-2.045693242E9);
+CREATE UNIQUE INDEX i0 ON T53(C1);
+INSERT INTO T0 (C0, C1) VALUES (0.7235768511180422, -815788322);
+INSERT INTO T0 (C1, C0) VALUES (-824893853, 0.7361543826482297);
+INSERT INTO T0 (C1, C0) VALUES (-7034512, 0.5521121602032146);
+INSERT INTO T0 (C1, C0) VALUES (0, 0.0);
+-- SELECT DISTINCT T0.C0, T53.C0, T0.C1, T53.C2, T53.C1 FROM T53, T0 WHERE (((NOT (((NOT (((- T53.C1)) IS NULL)))OR((NOT ((((T53.C2)OR(T53.C2)))<(((DATE '1969-12-17') IS NOT NULL))))))))OR((NOT (((NOT ((((true) IS TRUE))OR(((T53.C0)!=(T0.C1))))))OR((NOT (((+ T0.C0))<=(T53.C0))))))));
+-- cardinality: 41
+-- (((- T53.C1)) IS NULL);((((T0.C1)LIKE(T53.C0)))OR(((T53.C2)OR(T53.C2))));((((T0.C0)LIKE(T0.C0)))<(((T53.C2)AND(T53.C2))));(NOT (NOT true));((((true) IS TRUE))OR(((T53.C0)!=(T0.C1))));(((NOT true))>((NOT T53.C2)));((((T53.C1)>(T0.C0))) IS TRUE);((((T53.C2)OR(T53.C2)))<(((DATE '1969-12-17') IS NOT NULL)));(((NOT T53.C2)) IS FALSE);(((+ T0.C0))<=(T53.C0));
+-- cardinality: 43

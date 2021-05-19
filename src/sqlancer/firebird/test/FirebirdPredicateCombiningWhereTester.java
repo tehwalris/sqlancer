@@ -28,7 +28,7 @@ public class FirebirdPredicateCombiningWhereTester extends FirebirdPredicateComb
         List<String> resultSet = ComparatorHelper.getResultSetFirstColumnAsString(combinedQueryString, errors, state);
         List<String> expectedResultSet = getExpectedResultsFirstColumn(tableContent,
                 combinedPredicate.getExpectedResults());
-        ComparatorHelper.assumeResultSetsAreEqual(expectedResultSet, resultSet, combinedQueryString, predicateStrings,
+        ComparatorHelper.assumeResultSetsAreEqual(resultSet, expectedResultSet, combinedQueryString, predicateStrings,
                 state);
 
     }

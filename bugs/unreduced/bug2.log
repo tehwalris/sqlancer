@@ -1,0 +1,64 @@
+--java.lang.AssertionError: the size of the result sets mismatch (12 and 24)!
+---- SELECT T0.C1, T0.C2, T60.C0, T0.C0 FROM T0 RIGHT  JOIN T60 ON ((((((((T60.C0)OR(T60.C0))) IS TRUE)) IS UNKNOWN)) IS NOT UNKNOWN) WHERE (((((NOT T60.C0))AND((NOT (NOT (NOT T60.C0))))))OR((((((+ 1628466987))<=((+ T0.C0))))OR((NOT T60.C0)))));
+---- cardinality: 12
+---- (((+ 1628466987))<=((+ T0.C0)));T60.C0;T60.C0;(NOT T60.C0);T60.C0;(((NOT T60.C0))OR(((true)AND(T60.C0))));(NOT (NOT T60.C0));T60.C0;((((T0.C0)>=(0.525993679915331))) IS TRUE);(((- 5.24619183E8))LIKE(((T0.C2)*(T0.C2))));
+---- cardinality: 24
+--	at sqlancer.ComparatorHelper.assumeResultSetsAreEqual(ComparatorHelper.java:94)
+--	at sqlancer.firebird.test.FirebirdPredicateCombiningWhereTester.check(FirebirdPredicateCombiningWhereTester.java:31)
+--	at sqlancer.common.oracle.CompositeTestOracle.check(CompositeTestOracle.java:21)
+--	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:49)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:101)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:1)
+--	at sqlancer.Main$DBMSExecutor.run(Main.java:324)
+--	at sqlancer.Main$2.run(Main.java:508)
+--	at sqlancer.Main$2.runThread(Main.java:486)
+--	at sqlancer.Main$2.run(Main.java:476)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+--	at java.base/java.lang.Thread.run(Thread.java:834)
+---- Time: 2021/05/19 11:18:10
+-- Database: database2
+-- Database version: WI-V3.0.7.33374
+-- seed value: 1621415564517
+CREATE TABLE t60(c0 BOOLEAN);
+CREATE TABLE t0(c0 FLOAT, c1 DATE, c2 INTEGER, PRIMARY KEY(c1));
+INSERT INTO T60 (C0) VALUES (true);
+INSERT INTO T60 (C0) VALUES (NULL);
+INSERT INTO T0 (C0, C2) VALUES (0.4158623961625677, 1369103550);
+INSERT INTO T60 (C0) VALUES (true);
+INSERT INTO T0 (C0, C2, C1) VALUES (0.11698274924245733, 1266120499, DATE '1970-01-14');
+INSERT INTO T0 (C0, C2, C1) VALUES (0.21204967861029567, 695956645, DATE '1969-12-21');
+INSERT INTO T60 (C0) VALUES (true);
+INSERT INTO T60 (C0) VALUES (false);
+UPDATE T0 SET C1=DATE '1969-12-11', C2=-2030373219, C0=0.8249207494744313;
+UPDATE T0 SET C0=0.585409978253736;
+INSERT INTO T60 (C0) VALUES (true);
+UPDATE T0 SET C1=DATE '1969-12-30', C2=-746819221, C0=0.3812256891828689;
+UPDATE T60 SET C0=true;
+INSERT INTO T60 (C0) VALUES (true);
+INSERT INTO T60 (C0) VALUES (true);
+DELETE FROM T0 WHERE ((DATE '1969-12-16')>(DATE '1969-12-13'));
+CREATE INDEX i0 ON T0(C2);
+INSERT INTO T60 (C0) VALUES (false);
+INSERT INTO T0 (C1, C2) VALUES (DATE '292269055-12-02', 844344250);
+INSERT INTO T0 (C2) VALUES (-364417001);
+INSERT INTO T0 (C0, C1, C2) VALUES (0.0782489812625834, DATE '1969-12-09', 541067742);
+INSERT INTO T60 (C0) VALUES (false);
+UPDATE T60 SET C0=true;
+INSERT INTO T0 (C2, C0, C1) VALUES (-2109365941, 0.22667182504311245, DATE '1970-01-09');
+INSERT INTO T0 (C0) VALUES (0.15931256096037827);
+INSERT INTO T0 (C0) VALUES (0.6820231247422396);
+INSERT INTO T60 (C0) VALUES (true);
+CREATE UNIQUE INDEX i1 ON T0(C0);
+INSERT INTO T0 (C1) VALUES (DATE '1969-12-24');
+INSERT INTO T0 (C2, C0) VALUES (-146911512, 0.5859656814688117);
+INSERT INTO T0 (C1, C0, C2) VALUES (DATE '1969-12-16', 1.628466987E9, 1367366410);
+CREATE INDEX i2 ON T0(C2);
+INSERT INTO T60 (C0) VALUES (false);
+INSERT INTO T60 (C0) VALUES (false);
+INSERT INTO T60 (C0) VALUES (true);
+INSERT INTO T60 (C0) VALUES (false);
+-- SELECT T0.C1, T0.C2, T60.C0, T0.C0 FROM T0 RIGHT  JOIN T60 ON ((((((((T60.C0)OR(T60.C0))) IS TRUE)) IS UNKNOWN)) IS NOT UNKNOWN) WHERE (((((NOT T60.C0))AND((NOT (NOT (NOT T60.C0))))))OR((((((+ 1628466987))<=((+ T0.C0))))OR((NOT T60.C0)))));
+-- cardinality: 12
+-- (((+ 1628466987))<=((+ T0.C0)));T60.C0;T60.C0;(NOT T60.C0);T60.C0;(((NOT T60.C0))OR(((true)AND(T60.C0))));(NOT (NOT T60.C0));T60.C0;((((T0.C0)>=(0.525993679915331))) IS TRUE);(((- 5.24619183E8))LIKE(((T0.C2)*(T0.C2))));
+-- cardinality: 24

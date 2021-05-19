@@ -1,5 +1,6 @@
 package sqlancer.firebird;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -92,17 +93,31 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
                 });
         se.executeStatements();
     }
+    
+    @Override
+    public void generateAndTestDatabase(FirebirdGlobalState globalState) throws Exception {
+    	ExpectedErrors errors = new ExpectedErrors();
+    	FirebirdErrors.addUnstableErrors(errors);
+    	try {
+    		super.generateAndTestDatabase(globalState);
+    	} catch (Exception e) {
+    		if (e.getMessage() != null && errors.errorIsExpected(e.getMessage())) {
+    			throw new IgnoreMeException();
+    		}
+    		throw e;
+    	}
+    }
 
     @Override
     public SQLConnection createDatabase(FirebirdGlobalState globalState) throws Exception {
+    	ExpectedErrors errors = new ExpectedErrors();
+        FirebirdErrors.addUnstableErrors(errors);
+        
         String databaseName = globalState.getDatabaseName();
         String username = "SYSDBA";
         String password = "masterkey";
         String host = globalState.getDmbsSpecificOptions().host;
         int port = globalState.getDmbsSpecificOptions().port;
-
-        ExpectedErrors errors = new ExpectedErrors();
-        FirebirdErrors.addUnstableErrors(errors);
 
         FBManager manager = new FBManager();
         manager.setUserName(username);
@@ -111,11 +126,22 @@ public class FirebirdProvider extends SQLProviderAdapter<FirebirdGlobalState, Fi
         if (manager.isDatabaseExists(databaseName, username, password)) {
             manager.dropDatabase(databaseName, username, password);
         }
+        manager.setForceCreate(true);
         manager.createDatabase(databaseName, username, password);
         manager.stop();
 
         String url = String.format("jdbc:firebirdsql://%s:%d/%s?charSet=utf-8", host, port, databaseName);
-        return new SQLConnection(DriverManager.getConnection(url, username, password));
+        Connection con;
+        try {
+        	con = DriverManager.getConnection(url, username, password);
+        } catch (Exception e) {
+        	if (e.getMessage() != null && errors.errorIsExpected(e.getMessage())) {
+    			throw new IgnoreMeException();
+    		}
+    		throw e;
+        }
+        
+        return new SQLConnection(con);
     }
 
     @Override

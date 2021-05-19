@@ -1,0 +1,56 @@
+--java.lang.AssertionError: the size of the result sets mismatch (0 and 3)!
+---- SELECT DISTINCT T32.C0, T0.C0, T0.C1 FROM T32, T0 WHERE ((0.7093513495780484)=((+ T32.C0)));
+---- cardinality: 0
+---- (((NOT true))AND(((true) IS FALSE)));true;((DATE '1969-12-27')NOT LIKE(DATE '1970-01-11'));((0.7093513495780484)=((+ T32.C0)));(((- T32.C0))LIKE((+ T32.C0)));((((true)AND(true)))AND((NOT true)));((((T0.C0)>=(T0.C0))) IS NOT UNKNOWN);((true) IS TRUE);((((TIMESTAMP '1969-12-27 07:36:54') IS NULL)) IS NOT UNKNOWN);(((NOT false)) IS NOT UNKNOWN);
+---- cardinality: 3
+--	at sqlancer.ComparatorHelper.assumeResultSetsAreEqual(ComparatorHelper.java:94)
+--	at sqlancer.firebird.test.FirebirdPredicateCombiningDistinctTester.check(FirebirdPredicateCombiningDistinctTester.java:32)
+--	at sqlancer.common.oracle.CompositeTestOracle.check(CompositeTestOracle.java:21)
+--	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:49)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:101)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:1)
+--	at sqlancer.Main$DBMSExecutor.run(Main.java:324)
+--	at sqlancer.Main$2.run(Main.java:508)
+--	at sqlancer.Main$2.runThread(Main.java:486)
+--	at sqlancer.Main$2.run(Main.java:476)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+--	at java.base/java.lang.Thread.run(Thread.java:834)
+---- Time: 2021/05/19 10:52:14
+-- Database: database3
+-- Database version: WI-V3.0.7.33374
+-- seed value: 1621414324276
+CREATE TABLE t32(c0 FLOAT, PRIMARY KEY(c0));
+CREATE TABLE t0(c0 DATE, c1 TIMESTAMP, PRIMARY KEY(c1));
+CREATE INDEX i0 ON T32(C0);
+UPDATE T0 SET C0=DATE '1970-01-04', C1=TIMESTAMP '1970-01-01 11:53:07';
+INSERT INTO T0 (C1) VALUES (TIMESTAMP '1969-12-08 19:03:59');
+UPDATE T0 SET C0=DATE '1969-12-23';
+INSERT INTO T32 (C0) VALUES (0.30106350487477873);
+INSERT INTO T32 (C0) VALUES (0.8963424497995833);
+INSERT INTO T0 (C0, C1) VALUES (DATE '1970-01-20', TIMESTAMP '1970-01-22 06:05:36');
+INSERT INTO T32 DEFAULT VALUES;
+INSERT INTO T32 (C0) VALUES (0.7093513495780484);
+UPDATE T32 SET C0=0.4380883344082934;
+UPDATE T0 SET C0=DATE '1969-12-29';
+CREATE INDEX i1 ON T32(C0);
+INSERT INTO T32 (C0) VALUES (0.13916680274026327);
+UPDATE T0 SET C0=DATE '1969-12-31', C1=TIMESTAMP '1969-12-27 14:31:51';
+UPDATE T32 SET C0=0.4738180025309292;
+UPDATE T0 SET C0=DATE '1969-12-15';
+INSERT INTO T0 (C1) VALUES (TIMESTAMP '1969-12-13 12:53:16');
+CREATE INDEX i2 ON T0(C0, C1);
+CREATE DESC INDEX i3 ON T32(C0);
+CREATE INDEX i4 ON T32(C0);
+UPDATE T32 SET C0=0.05905534345629382;
+UPDATE T32 SET C0=-1.909551103E9;
+UPDATE T32 SET C0=0.36392251961186006;
+UPDATE T32 SET C0=5.8072454E7;
+UPDATE T0 SET C0=DATE '1970-01-15', C1=TIMESTAMP '1969-12-24 20:48:32';
+UPDATE T32 SET C0=-1.364645647E9;
+UPDATE T32 SET C0=0.938148909967945;
+UPDATE T0 SET C0=DATE '1970-01-07';
+-- SELECT DISTINCT T32.C0, T0.C0, T0.C1 FROM T32, T0 WHERE ((0.7093513495780484)=((+ T32.C0)));
+-- cardinality: 0
+-- (((NOT true))AND(((true) IS FALSE)));true;((DATE '1969-12-27')NOT LIKE(DATE '1970-01-11'));((0.7093513495780484)=((+ T32.C0)));(((- T32.C0))LIKE((+ T32.C0)));((((true)AND(true)))AND((NOT true)));((((T0.C0)>=(T0.C0))) IS NOT UNKNOWN);((true) IS TRUE);((((TIMESTAMP '1969-12-27 07:36:54') IS NULL)) IS NOT UNKNOWN);(((NOT false)) IS NOT UNKNOWN);
+-- cardinality: 3

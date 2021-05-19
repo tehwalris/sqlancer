@@ -38,6 +38,7 @@ public final class FirebirdErrors {
         errors.add("expression evaluation not supported");
         errors.add("The result of an integer operation caused the most significant bit of the result to carry.");
         errors.add("numeric value is out of range");
+        errors.add("Strings cannot be added or subtracted in dialect 3");
     }
 
     public static void addIndexErrors(ExpectedErrors errors) {
