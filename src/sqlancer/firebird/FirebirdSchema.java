@@ -22,12 +22,21 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
     // Boolean is only supported for Firebird version 3.0 and later
     public enum FirebirdDataType {
 
-        INTEGER, FLOAT, BOOLEAN, TIMESTAMP, DATE;
+        INTEGER, FLOAT, BOOLEAN, TIMESTAMP, DATE, VARCHAR;
 
         public static FirebirdDataType getRandom() {
             return Randomly.fromOptions(values());
         }
 
+        @Override
+        public String toString() {
+            switch (this) {
+            case VARCHAR:
+                return "VARCHAR(100)";
+            default:
+                return this.name();
+            }
+        }
     }
 
     public static class FirebirdColumn extends AbstractTableColumn<FirebirdTable, FirebirdDataType> {
@@ -87,6 +96,9 @@ public class FirebirdSchema extends AbstractSchema<FirebirdGlobalState, Firebird
             break;
         case "12": // DATE
             columnType = FirebirdDataType.DATE;
+            break;
+        case "37": // VARCHAR
+            columnType = FirebirdDataType.VARCHAR;
             break;
         default:
             throw new AssertionError(typeCode);

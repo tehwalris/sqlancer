@@ -59,6 +59,7 @@ public final class FirebirdExpressionGenerator
                 return generateArithmeticExpression(depth);
             case TIMESTAMP:
             case DATE:
+            case VARCHAR:
                 return generateConstant(dataType);
             default:
                 throw new AssertionError(dataType);
@@ -155,6 +156,8 @@ public final class FirebirdExpressionGenerator
             return FirebirdConstant.createTimestampConstant(r.getInteger());
         case DATE:
             return FirebirdConstant.createDateConstant(r.getInteger());
+        case VARCHAR:
+            return FirebirdConstant.createStringConstant(r.getString());
         default:
             throw new AssertionError(type);
         }
