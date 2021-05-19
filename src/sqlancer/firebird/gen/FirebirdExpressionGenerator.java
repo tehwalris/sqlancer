@@ -1,6 +1,7 @@
 package sqlancer.firebird.gen;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +30,8 @@ public final class FirebirdExpressionGenerator
     private final Randomly r;
 
     private final FirebirdGlobalState globalState;
+
+    private boolean logicInPredicates = true;
 
     public FirebirdExpressionGenerator(FirebirdGlobalState globalState) {
         this.r = globalState.getRandomly();
@@ -67,12 +70,21 @@ public final class FirebirdExpressionGenerator
         }
     }
 
+    public void setLogicInPredicates(boolean logicInPredicates) {
+        this.logicInPredicates = logicInPredicates;
+    }
+
     private enum BooleanExpression {
         NOT, BINARY_LOGICAL_OPERATOR, POSTFIX_OPERATOR, BINARY_COMPARISON;
     }
 
     private Node<FirebirdExpression> generateBooleanExpression(int depth) {
-        BooleanExpression option = Randomly.fromOptions(BooleanExpression.values());
+        List<BooleanExpression> validOptions = new ArrayList<>(Arrays.asList(BooleanExpression.values()));
+        if (!this.logicInPredicates) {
+            validOptions.remove(BooleanExpression.NOT);
+            validOptions.remove(BooleanExpression.BINARY_LOGICAL_OPERATOR);
+        }
+        BooleanExpression option = Randomly.fromList(validOptions);
         switch (option) {
         case NOT:
             return new NewUnaryPrefixOperatorNode<FirebirdExpression>(

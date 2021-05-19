@@ -57,6 +57,7 @@ public class FirebirdPredicateCombiningBase
         s = state.getSchema();
         targetTables = s.getRandomTableNonEmptyTables();
         gen = new FirebirdExpressionGenerator(state, 1).setColumns(targetTables.getColumns());
+        gen.setLogicInPredicates(false);
         List<Node<FirebirdExpression>> fetchColumns = generateFetchColumns();
         initializeInternalTables(state.getDmbsSpecificOptions().numOraclePredicates, numColumns);
         List<TableReferenceNode<FirebirdExpression, FirebirdTable>> tableList = targetTables.getTables().stream()
