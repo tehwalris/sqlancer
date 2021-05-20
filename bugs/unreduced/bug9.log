@@ -1,0 +1,56 @@
+--java.lang.AssertionError: the size of the result sets mismatch (9 and 10)!
+---- SELECT DISTINCT T0.C1 FROM T0 WHERE (((NOT ((DATE '1969-12-13') IS NULL)))AND((((NOT ((T0.C1)>((+ 1272504567)))))OR((NOT ((true) IS TRUE))))));
+---- cardinality: 9
+---- ((((T0.C1)+(1507730996)))<=((- T0.C1)));((TIMESTAMP '1970-01-04 11:26:46') IS NOT NULL);((true) IS TRUE);((DATE '1969-12-13') IS NULL);((TIMESTAMP '1969-12-15 02:00:57')<(TIMESTAMP '1969-12-26 21:28:27'));((T0.C1)>((+ 1272504567)));((((false) IS TRUE)) IS FALSE);((TIMESTAMP '1970-01-01 18:38:54') IS NULL);(((+ -685888740)) IS NOT NULL);(((+ 1233498419))<=(((T0.C1)+(798796703))));
+---- cardinality: 10
+--	at sqlancer.ComparatorHelper.assumeResultSetsAreEqual(ComparatorHelper.java:94)
+--	at sqlancer.firebird.test.FirebirdPredicateCombiningDistinctTester.check(FirebirdPredicateCombiningDistinctTester.java:32)
+--	at sqlancer.common.oracle.CompositeTestOracle.check(CompositeTestOracle.java:21)
+--	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:49)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:102)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:1)
+--	at sqlancer.Main$DBMSExecutor.run(Main.java:324)
+--	at sqlancer.Main$2.run(Main.java:508)
+--	at sqlancer.Main$2.runThread(Main.java:490)
+--	at sqlancer.Main$2.run(Main.java:476)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+--	at java.base/java.lang.Thread.run(Thread.java:834)
+---- Time: 2021/05/20 10:18:41
+-- Database: database32
+-- Database version: WI-V3.0.7.33374
+-- seed value: 1621496449532
+CREATE TABLE t0(c0 TIMESTAMP, c1 FLOAT PRIMARY KEY);
+INSERT INTO T0 (C1, C0) VALUES (0.4175961088484419, TIMESTAMP '1970-01-12 04:53:18');
+INSERT INTO T0 (C0) VALUES (TIMESTAMP '1969-12-14 20:36:19');
+INSERT INTO T0 (C1, C0) VALUES (8.02470592E8, TIMESTAMP '1970-01-06 06:36:10');
+CREATE INDEX i0 ON T0(C0);
+INSERT INTO T0 (C0, C1) VALUES (TIMESTAMP '1969-12-31 01:58:00', 0.253788838423853);
+INSERT INTO T0 (C0) VALUES (TIMESTAMP '1970-01-25 00:17:52');
+INSERT INTO T0 (C0) VALUES (TIMESTAMP '1970-01-23 18:49:01');
+INSERT INTO T0 (C1, C0) VALUES (1.272504567E9, TIMESTAMP '1970-01-05 12:17:10');
+INSERT INTO T0 (C0, C1) VALUES (TIMESTAMP '1970-01-18 16:04:07', 0.20119886683398513);
+UPDATE T0 SET C0=TIMESTAMP '1969-12-08 05:17:50', C1=0.9557769479290921;
+UPDATE T0 SET C1=0.054460489725297934;
+UPDATE T0 SET C1=0.47968335804111106;
+UPDATE T0 SET C1=0.515955252046546;
+UPDATE T0 SET C1=2.092151417E9;
+UPDATE T0 SET C0=TIMESTAMP '1969-12-30 03:44:16', C1=0.43752894552715693;
+UPDATE T0 SET C1=0.7997864604502821;
+UPDATE T0 SET C0=TIMESTAMP '1969-12-14 11:23:27';
+INSERT INTO T0 (C1, C0) VALUES (0.6585535837008373, TIMESTAMP '1970-01-16 19:13:10');
+INSERT INTO T0 (C1) VALUES (1.095445609E9);
+UPDATE T0 SET C0=TIMESTAMP '1969-12-20 21:18:26';
+INSERT INTO T0 (C0, C1) VALUES (TIMESTAMP '1970-01-16 22:36:30', 0.5726488434294966);
+CREATE UNIQUE INDEX i1 ON T0(C0, C1);
+CREATE INDEX i2 ON T0(C0);
+CREATE INDEX i3 ON T0(C1);
+INSERT INTO T0 (C0) VALUES (TIMESTAMP '1970-01-11 14:18:54');
+INSERT INTO T0 (C1) VALUES (-4.44692928E8);
+INSERT INTO T0 (C0) VALUES (TIMESTAMP '1970-01-15 02:12:04');
+INSERT INTO T0 (C0) VALUES (TIMESTAMP '1970-01-03 10:14:00');
+INSERT INTO T0 (C0, C1) VALUES (TIMESTAMP '1969-12-27 03:45:22', -4.22077579E8);
+-- SELECT DISTINCT T0.C1 FROM T0 WHERE (((NOT ((DATE '1969-12-13') IS NULL)))AND((((NOT ((T0.C1)>((+ 1272504567)))))OR((NOT ((true) IS TRUE))))));
+-- cardinality: 9
+-- ((((T0.C1)+(1507730996)))<=((- T0.C1)));((TIMESTAMP '1970-01-04 11:26:46') IS NOT NULL);((true) IS TRUE);((DATE '1969-12-13') IS NULL);((TIMESTAMP '1969-12-15 02:00:57')<(TIMESTAMP '1969-12-26 21:28:27'));((T0.C1)>((+ 1272504567)));((((false) IS TRUE)) IS FALSE);((TIMESTAMP '1970-01-01 18:38:54') IS NULL);(((+ -685888740)) IS NOT NULL);(((+ 1233498419))<=(((T0.C1)+(798796703))));
+-- cardinality: 10

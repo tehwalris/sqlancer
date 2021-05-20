@@ -1,0 +1,53 @@
+--java.lang.AssertionError: the size of the result sets mismatch (0 and 1)!
+---- SELECT T0.C0 FROM T0 WHERE (((((NOT (((- -256328597))LIKE(((T0.C0)/(T0.C0))))))AND((((+ 1366091320))=((+ T0.C0))))))AND((((NOT (((- T0.C0))!=(((1191262520)+(T0.C0))))))OR((NOT ((T0.C0)LIKE((- 0.2790670567126241))))))));
+---- cardinality: 0
+---- ((((T0.C0)>(T0.C0))) IS NOT UNKNOWN);((((false) IS NOT NULL)) IS TRUE);(((+ 1366091320))=((+ T0.C0)));((((true) IS NOT UNKNOWN)) IS TRUE);((((T0.C0)+(1191262520)))!=((- T0.C0)));((T0.C0)LIKE((- 0.2790670567126241)));((((T0.C0)+(-9223372036854775808)))<=((- T0.C0)));(((- -256328597))LIKE(((T0.C0)/(T0.C0))));(((- T0.C0))!=(((1191262520)+(T0.C0))));((((0.8291832424621806)<=(T0.C0))) IS NOT UNKNOWN);
+---- cardinality: 1
+--	at sqlancer.ComparatorHelper.assumeResultSetsAreEqual(ComparatorHelper.java:94)
+--	at sqlancer.firebird.test.FirebirdPredicateCombiningWhereTester.check(FirebirdPredicateCombiningWhereTester.java:31)
+--	at sqlancer.common.oracle.CompositeTestOracle.check(CompositeTestOracle.java:21)
+--	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:49)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:102)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:1)
+--	at sqlancer.Main$DBMSExecutor.run(Main.java:324)
+--	at sqlancer.Main$2.run(Main.java:508)
+--	at sqlancer.Main$2.runThread(Main.java:490)
+--	at sqlancer.Main$2.run(Main.java:476)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+--	at java.base/java.lang.Thread.run(Thread.java:834)
+---- Time: 2021/05/20 10:06:50
+-- Database: database26
+-- Database version: WI-V3.0.7.33374
+-- seed value: 1621496449525
+CREATE TABLE t0(c0 FLOAT, PRIMARY KEY(c0));
+INSERT INTO T0 (C0) VALUES (1.682214134E9);
+INSERT INTO T0 (C0) VALUES (NULL);
+INSERT INTO T0 (C0) VALUES (0.559172910126109);
+INSERT INTO T0 (C0) VALUES (0.9712223772392296);
+INSERT INTO T0 (C0) VALUES (0.27538868619136925);
+CREATE INDEX i4 ON T0(C0);
+INSERT INTO T0 (C0) VALUES (0.5882513151459791);
+INSERT INTO T0 (C0) VALUES (0.04504671559728335);
+INSERT INTO T0 (C0) VALUES (0.2230831724846516);
+INSERT INTO T0 (C0) VALUES (0.9549429235583808);
+INSERT INTO T0 (C0) VALUES (0.09719636586070723);
+INSERT INTO T0 (C0) VALUES (0.5258666439557759);
+INSERT INTO T0 (C0) VALUES (0.6050897415542313);
+INSERT INTO T0 (C0) VALUES (0.14664046944856057);
+CREATE INDEX i0 ON T0(C0);
+INSERT INTO T0 (C0) VALUES (1.564327053E9);
+INSERT INTO T0 (C0) VALUES (0.8850322181061637);
+INSERT INTO T0 (C0) VALUES (0.7323988003987142);
+INSERT INTO T0 (C0) VALUES (1.36609132E9);
+INSERT INTO T0 (C0) VALUES (0.05157731653118658);
+INSERT INTO T0 (C0) VALUES (0.47091511651710904);
+INSERT INTO T0 (C0) VALUES (0.6844867413472179);
+CREATE UNIQUE ASC INDEX i1 ON T0(C0);
+INSERT INTO T0 (C0) VALUES (0.07929296075207004);
+INSERT INTO T0 (C0) VALUES (-1.084940473E9);
+CREATE INDEX i2 ON T0(C0);
+-- SELECT T0.C0 FROM T0 WHERE (((((NOT (((- -256328597))LIKE(((T0.C0)/(T0.C0))))))AND((((+ 1366091320))=((+ T0.C0))))))AND((((NOT (((- T0.C0))!=(((1191262520)+(T0.C0))))))OR((NOT ((T0.C0)LIKE((- 0.2790670567126241))))))));
+-- cardinality: 0
+-- ((((T0.C0)>(T0.C0))) IS NOT UNKNOWN);((((false) IS NOT NULL)) IS TRUE);(((+ 1366091320))=((+ T0.C0)));((((true) IS NOT UNKNOWN)) IS TRUE);((((T0.C0)+(1191262520)))!=((- T0.C0)));((T0.C0)LIKE((- 0.2790670567126241)));((((T0.C0)+(-9223372036854775808)))<=((- T0.C0)));(((- -256328597))LIKE(((T0.C0)/(T0.C0))));(((- T0.C0))!=(((1191262520)+(T0.C0))));((((0.8291832424621806)<=(T0.C0))) IS NOT UNKNOWN);
+-- cardinality: 1

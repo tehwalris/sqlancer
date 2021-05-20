@@ -1,0 +1,28 @@
+SQL> CREATE TABLE t0(c0 VARCHAR(100));
+SQL> INSERT INTO T0 (C0) VALUES ('8
+CON> J');
+SQL> COMMIT;
+SQL> CREATE UNIQUE INDEX i52 ON T0(C0);
+
+
+
+
+SQL> SELECT T0.C0 FROM T0 WHERE (('8')>(T0.C0));
+
+Select Expression
+    -> Filter
+        -> Table "T0" Access By ID
+            -> Bitmap
+                -> Index "I52" Range Scan (upper bound: 1/1)
+
+
+
+
+SQL> SELECT (('8')>(T0.C0)) FROM T0;
+
+Select Expression
+    -> Table "T0" Full Scan
+
+
+=======
+<true>

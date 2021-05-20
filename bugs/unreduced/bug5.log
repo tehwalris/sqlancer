@@ -1,0 +1,67 @@
+--java.lang.AssertionError: the size of the result sets mismatch (16 and 17)!
+---- SELECT DISTINCT T0.C0 FROM T0 WHERE (((NOT (((('X?')LIKE('0.8219145359166363')))AND((NOT ((((false) IS NULL)) IS NOT NULL))))))OR((((NOT ((((1170940859) IS NULL)) IS TRUE)))AND((NOT ((((1170940859) IS NULL)) IS TRUE))))));
+---- cardinality: 16
+---- ((((true) IS UNKNOWN)) IS TRUE);true;((((DATE '1969-12-20')=(DATE '1970-01-08'))) IS FALSE);(('-312066365')=('1 _y?'));(('0.3761370410264572')<(''));(((+ T0.C2))=((+ T0.C2)));((((false) IS NULL)) IS NOT NULL);(('X?')LIKE('0.8219145359166363'));((((1170940859) IS NULL)) IS TRUE);((T0.C0)LIKE('^1sv'));
+---- cardinality: 17
+--	at sqlancer.ComparatorHelper.assumeResultSetsAreEqual(ComparatorHelper.java:94)
+--	at sqlancer.firebird.test.FirebirdPredicateCombiningDistinctTester.check(FirebirdPredicateCombiningDistinctTester.java:32)
+--	at sqlancer.common.oracle.CompositeTestOracle.check(CompositeTestOracle.java:21)
+--	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:49)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:102)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:1)
+--	at sqlancer.Main$DBMSExecutor.run(Main.java:324)
+--	at sqlancer.Main$2.run(Main.java:508)
+--	at sqlancer.Main$2.runThread(Main.java:490)
+--	at sqlancer.Main$2.run(Main.java:476)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+--	at java.base/java.lang.Thread.run(Thread.java:834)
+---- Time: 2021/05/20 09:58:45
+-- Database: database15
+-- Database version: WI-V3.0.7.33374
+-- seed value: 1621496449508
+CREATE TABLE t0(c0 VARCHAR(100), c1 VARCHAR(100), c2 FLOAT, PRIMARY KEY(c1));
+INSERT INTO T0 (C0, C1, C2) VALUES ('J', '&6.', 0.8185488077230094);
+INSERT INTO T0 (C2, C1, C0) VALUES (0.8810137935744299, 'QT? .', '1248544201');
+INSERT INTO T0 (C0, C1) VALUES ('0.35423886776794034', '0.8679729022207012');
+DELETE FROM T0;
+INSERT INTO T0 (C1, C2, C0) VALUES ('dwo6', 1.87877675E9, '?<');
+INSERT INTO T0 (C1, C0, C2) VALUES ('1e500', 'SJ<k?(4', 0.3018419659841741);
+INSERT INTO T0 (C0) VALUES ('-1535413046');
+INSERT INTO T0 (C1, C0, C2) VALUES ('1652923242', '!', 0.2357630262754148);
+INSERT INTO T0 (C2, C1, C0) VALUES (2.142246874E9, 'R6Tf', 'fc');
+INSERT INTO T0 (C2, C0, C1) VALUES (0.5642189506549654, 'A', '0.2357630262754148');
+INSERT INTO T0 (C0, C1, C2) VALUES ('', '', 0.8399674302884226);
+INSERT INTO T0 (C0) VALUES ('	]');
+INSERT INTO T0 (C2) VALUES (0.7706123178374731);
+INSERT INTO T0 DEFAULT VALUES;
+INSERT INTO T0 (C1, C2) VALUES ('-44555775', 1.604219296E9);
+INSERT INTO T0 (C1, C0) VALUES ('5', ')1');
+INSERT INTO T0 (C0, C1, C2) VALUES ('ux', 'T', 0.14453202436496293);
+INSERT INTO T0 (C2) VALUES (0.35140101318185);
+INSERT INTO T0 (C2, C0) VALUES (0.4797259007842847, '0.7387271311253376');
+INSERT INTO T0 (C2, C1) VALUES (0.6330032643966096, '6?O');
+INSERT INTO T0 (C0) VALUES ('(');
+INSERT INTO T0 (C0) VALUES ('');
+INSERT INTO T0 (C1) VALUES ('');
+INSERT INTO T0 (C0) VALUES ('');
+INSERT INTO T0 (C0, C2) VALUES ('#', 0.28611063345890086);
+INSERT INTO T0 (C0, C1) VALUES ('0.968790239086731', '?qLl');
+INSERT INTO T0 (C1, C0) VALUES ('RC,c', '306796730');
+INSERT INTO T0 (C0, C1, C2) VALUES ('?/v~', '', 0.19498776876052637);
+INSERT INTO T0 (C0, C2) VALUES ('R', 0.5046137221667569);
+INSERT INTO T0 (C1, C0) VALUES ('-525303190', '2044008194');
+INSERT INTO T0 (C0, C1) VALUES ('-2006042333', '');
+INSERT INTO T0 (C2, C1, C0) VALUES (0.968790239086731, '', '');
+INSERT INTO T0 (C2) VALUES (0.19787552694119792);
+INSERT INTO T0 (C2, C1, C0) VALUES (0.48340760838940267, '?v
+', ' ');
+INSERT INTO T0 (C1) VALUES ('');
+INSERT INTO T0 (C1, C0, C2) VALUES ('0.37427975252066725', '-1284296477', 0.6880223656880112);
+INSERT INTO T0 (C2, C1, C0) VALUES (0.36334561047492364, 'v|yS', 'q');
+INSERT INTO T0 (C1, C0) VALUES ('?-?2s*', 'M?x');
+INSERT INTO T0 (C0, C1) VALUES ('-138859221', '-312066365');
+-- SELECT DISTINCT T0.C0 FROM T0 WHERE (((NOT (((('X?')LIKE('0.8219145359166363')))AND((NOT ((((false) IS NULL)) IS NOT NULL))))))OR((((NOT ((((1170940859) IS NULL)) IS TRUE)))AND((NOT ((((1170940859) IS NULL)) IS TRUE))))));
+-- cardinality: 16
+-- ((((true) IS UNKNOWN)) IS TRUE);true;((((DATE '1969-12-20')=(DATE '1970-01-08'))) IS FALSE);(('-312066365')=('1 _y?'));(('0.3761370410264572')<(''));(((+ T0.C2))=((+ T0.C2)));((((false) IS NULL)) IS NOT NULL);(('X?')LIKE('0.8219145359166363'));((((1170940859) IS NULL)) IS TRUE);((T0.C0)LIKE('^1sv'));
+-- cardinality: 17

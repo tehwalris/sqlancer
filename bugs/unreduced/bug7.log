@@ -1,0 +1,60 @@
+--java.lang.AssertionError: the size of the result sets mismatch (5 and 6)!
+---- SELECT T0.C0 FROM T0 WHERE (((NOT ((((((false) IS TRUE)) IS NOT UNKNOWN))OR((NOT (('o')<=(T0.C0)))))))OR(((((((-1231005368) IS NOT NULL)) IS FALSE))OR((('o')<=(T0.C0))))));
+---- cardinality: 5
+---- ((((false) IS TRUE)) IS NOT UNKNOWN);(('D7Ke&') IS NOT NULL);(('o')<=(T0.C0));((((T0.C0)<(T0.C0))) IS NOT UNKNOWN);false;((((-1231005368) IS NOT NULL)) IS FALSE);((((true) IS TRUE)) IS NOT UNKNOWN);(('PXY')<=(''));((true) IS UNKNOWN);(('m|Tn\zpT')>=('<csTi'));
+---- cardinality: 6
+--	at sqlancer.ComparatorHelper.assumeResultSetsAreEqual(ComparatorHelper.java:94)
+--	at sqlancer.firebird.test.FirebirdPredicateCombiningWhereTester.check(FirebirdPredicateCombiningWhereTester.java:31)
+--	at sqlancer.common.oracle.CompositeTestOracle.check(CompositeTestOracle.java:21)
+--	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:49)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:102)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:1)
+--	at sqlancer.Main$DBMSExecutor.run(Main.java:324)
+--	at sqlancer.Main$2.run(Main.java:508)
+--	at sqlancer.Main$2.runThread(Main.java:490)
+--	at sqlancer.Main$2.run(Main.java:476)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+--	at java.base/java.lang.Thread.run(Thread.java:834)
+---- Time: 2021/05/20 10:03:36
+-- Database: database23
+-- Database version: WI-V3.0.7.33374
+-- seed value: 1621496449516
+CREATE TABLE t0(c0 VARCHAR(100), PRIMARY KEY(c0));
+INSERT INTO T0 (C0) VALUES ('');
+CREATE UNIQUE INDEX i76 ON T0(C0);
+INSERT INTO T0 (C0) VALUES ('v3.?Dk(');
+CREATE INDEX i0 ON T0(C0);
+INSERT INTO T0 (C0) VALUES ('r?&+?');
+INSERT INTO T0 (C0) VALUES ('o');
+INSERT INTO T0 (C0) VALUES ('');
+INSERT INTO T0 (C0) VALUES ('Q2R');
+INSERT INTO T0 (C0) VALUES ('2136469201');
+CREATE INDEX i1 ON T0(C0);
+INSERT INTO T0 (C0) VALUES ('');
+INSERT INTO T0 (C0) VALUES ('T');
+INSERT INTO T0 (C0) VALUES ('?');
+INSERT INTO T0 (C0) VALUES ('W,TH0TR');
+INSERT INTO T0 (C0) VALUES ('* ');
+INSERT INTO T0 (C0) VALUES ('^Es');
+INSERT INTO T0 (C0) VALUES ('T?*xV/L2');
+CREATE INDEX i2 ON T0(C0);
+INSERT INTO T0 (C0) VALUES ('');
+INSERT INTO T0 (C0) VALUES ('-1491046045');
+INSERT INTO T0 (C0) VALUES ('');
+INSERT INTO T0 (C0) VALUES ('4>U?DZ?''');
+INSERT INTO T0 (C0) VALUES ('');
+INSERT INTO T0 (C0) VALUES ('i');
+INSERT INTO T0 (C0) VALUES ('');
+INSERT INTO T0 (C0) VALUES ('x2?#jk');
+INSERT INTO T0 (C0) VALUES ('a%');
+INSERT INTO T0 (C0) VALUES ('&<?	');
+INSERT INTO T0 (C0) VALUES ('977968486');
+INSERT INTO T0 (C0) VALUES ('{<0');
+INSERT INTO T0 (C0) VALUES ('z1Tsm8');
+INSERT INTO T0 (C0) VALUES ('');
+INSERT INTO T0 (C0) VALUES ('Sa');
+-- SELECT T0.C0 FROM T0 WHERE (((NOT ((((((false) IS TRUE)) IS NOT UNKNOWN))OR((NOT (('o')<=(T0.C0)))))))OR(((((((-1231005368) IS NOT NULL)) IS FALSE))OR((('o')<=(T0.C0))))));
+-- cardinality: 5
+-- ((((false) IS TRUE)) IS NOT UNKNOWN);(('D7Ke&') IS NOT NULL);(('o')<=(T0.C0));((((T0.C0)<(T0.C0))) IS NOT UNKNOWN);false;((((-1231005368) IS NOT NULL)) IS FALSE);((((true) IS TRUE)) IS NOT UNKNOWN);(('PXY')<=(''));((true) IS UNKNOWN);(('m|Tn\zpT')>=('<csTi'));
+-- cardinality: 6

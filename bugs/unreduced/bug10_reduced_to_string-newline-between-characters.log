@@ -1,0 +1,42 @@
+--java.lang.AssertionError: the size of the result sets mismatch (1 and 2)!
+---- SELECT DISTINCT T0.C0 FROM T0 WHERE (('8')>(T0.C0));
+---- cardinality: 1
+---- true;((' CKd+')LIKE(T0.C0));((((T0.C0)<=('[('))) IS TRUE);((((T0.C0)<('Y4'))) IS FALSE);(('')LIKE(T0.C0));true;(('8')>(T0.C0));(('0.19071857056628538')<('M'));((T0.C0)LIKE('1e500'));((((true) IS UNKNOWN)) IS TRUE);
+---- cardinality: 2
+--	at sqlancer.ComparatorHelper.assumeResultSetsAreEqual(ComparatorHelper.java:94)
+--	at sqlancer.firebird.test.FirebirdPredicateCombiningDistinctTester.check(FirebirdPredicateCombiningDistinctTester.java:32)
+--	at sqlancer.common.oracle.CompositeTestOracle.check(CompositeTestOracle.java:21)
+--	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:49)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:102)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:1)
+--	at sqlancer.Main$DBMSExecutor.run(Main.java:324)
+--	at sqlancer.Main$2.run(Main.java:508)
+--	at sqlancer.Main$2.runThread(Main.java:490)
+--	at sqlancer.Main$2.run(Main.java:476)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+--	at java.base/java.lang.Thread.run(Thread.java:834)
+---- Time: 2021/05/20 10:18:48
+-- Database: database33
+-- Database version: WI-V3.0.7.33374
+-- seed value: 1621496449533
+CREATE TABLE t0(c0 VARCHAR(100));
+CREATE TABLE t1(c0 VARCHAR(100) DEFAULT 'V6R?q');
+CREATE UNIQUE INDEX i0 ON T0(C0);
+INSERT INTO T0 (C0) VALUES ('8J');
+INSERT INTO T1 (C0) VALUES ('0.8201107879796912');
+INSERT INTO T1 (C0) VALUES (')_E*{?q');
+INSERT INTO T1 (C0) VALUES ('0.9970705502368926');
+INSERT INTO T0 (C0) VALUES ('');
+INSERT INTO T1 (C0) VALUES ('2117711933');
+INSERT INTO T1 (C0) VALUES ('N}\&i-t2a');
+INSERT INTO T0 (C0) VALUES ('?GC #E0');
+INSERT INTO T0 (C0) VALUES ('s
+J.w');
+CREATE DESC INDEX i1 ON T1(C0);
+CREATE UNIQUE INDEX i52 ON T0(C0);
+INSERT INTO T1 (C0) VALUES ('0.4202790228473794');
+-- SELECT DISTINCT T0.C0 FROM T0 WHERE (('8')>(T0.C0));
+-- cardinality: 1
+-- true;((' CKd+')LIKE(T0.C0));((((T0.C0)<=('[('))) IS TRUE);((((T0.C0)<('Y4'))) IS FALSE);(('')LIKE(T0.C0));true;(('8')>(T0.C0));(('0.19071857056628538')<('M'));((T0.C0)LIKE('1e500'));((((true) IS UNKNOWN)) IS TRUE);
+-- cardinality: 2

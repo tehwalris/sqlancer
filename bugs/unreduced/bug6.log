@@ -1,0 +1,69 @@
+--java.lang.AssertionError: the size of the result sets mismatch (16 and 17)!
+---- SELECT DISTINCT T76.C0 FROM T76 WHERE (((NOT (((NOT ((((true) IS TRUE)) IS TRUE)))AND((NOT (('Fyb')LIKE('')))))))AND((NOT (((NOT (('')!=('-95075419'))))AND((NOT ((((T76.C0)NOT LIKE(T76.C0))) IS FALSE)))))));
+---- cardinality: 16
+---- true;((((true) IS TRUE)) IS TRUE);((((NULL) IS NULL)) IS NOT UNKNOWN);true;(('N''')>('205741713'));(('j')>(''));(('')!=('-95075419'));(('Fyb')LIKE(''));((((T76.C0)NOT LIKE(T76.C0))) IS FALSE);((((0.6512456155985753) IS NOT NULL)) IS FALSE);
+---- cardinality: 17
+--	at sqlancer.ComparatorHelper.assumeResultSetsAreEqual(ComparatorHelper.java:94)
+--	at sqlancer.firebird.test.FirebirdPredicateCombiningDistinctTester.check(FirebirdPredicateCombiningDistinctTester.java:32)
+--	at sqlancer.common.oracle.CompositeTestOracle.check(CompositeTestOracle.java:21)
+--	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:49)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:102)
+--	at sqlancer.firebird.FirebirdProvider.generateAndTestDatabase(FirebirdProvider.java:1)
+--	at sqlancer.Main$DBMSExecutor.run(Main.java:324)
+--	at sqlancer.Main$2.run(Main.java:508)
+--	at sqlancer.Main$2.runThread(Main.java:490)
+--	at sqlancer.Main$2.run(Main.java:476)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+--	at java.base/java.lang.Thread.run(Thread.java:834)
+---- Time: 2021/05/20 10:02:27
+-- Database: database19
+-- Database version: WI-V3.0.7.33374
+-- seed value: 1621496449512
+CREATE TABLE t76(c0 VARCHAR(100));
+CREATE TABLE t0(c0 VARCHAR(100) NOT NULL, c1 INTEGER, c2 INTEGER NOT NULL, PRIMARY KEY(c0, c1));
+INSERT INTO T76 (C0) VALUES ('');
+INSERT INTO T0 (C0, C2) VALUES ('', 802161537);
+INSERT INTO T76 (C0) VALUES (' ');
+INSERT INTO T76 (C0) VALUES (')+');
+CREATE UNIQUE INDEX i0 ON T0(C0, C2, C1);
+INSERT INTO T76 (C0) VALUES ('');
+INSERT INTO T76 (C0) VALUES ('4');
+INSERT INTO T76 DEFAULT VALUES;
+INSERT INTO T76 (C0) VALUES ('QL');
+INSERT INTO T0 (C2) VALUES (-827382964);
+INSERT INTO T76 (C0) VALUES ('[KL&,');
+CREATE INDEX i1 ON T0(C0, C2, C1);
+INSERT INTO T76 (C0) VALUES ('2050603429');
+INSERT INTO T0 (C2) VALUES (579968459);
+INSERT INTO T0 (C0) VALUES ('I?%Ma>');
+INSERT INTO T0 (C0) VALUES (NULL);
+INSERT INTO T0 (C2) VALUES (-1539693581);
+INSERT INTO T0 (C2, C0, C1) VALUES (-844516339, ',p', -451725102);
+INSERT INTO T76 (C0) VALUES ('qe');
+INSERT INTO T0 (C1, C2) VALUES (-1001721423, -1057189739);
+INSERT INTO T76 (C0) VALUES ('604129809');
+INSERT INTO T76 (C0) VALUES ('9|lc');
+INSERT INTO T0 (C2, C1) VALUES (310115887, 1984284174);
+INSERT INTO T0 (C1) VALUES (1194723410);
+INSERT INTO T0 (C0) VALUES ('84c');
+INSERT INTO T76 (C0) VALUES ('O}?v');
+CREATE UNIQUE INDEX i2 ON T76(C0);
+CREATE UNIQUE INDEX i2 ON T76(C0);
+CREATE INDEX i2 ON T76(C0);
+INSERT INTO T0 (C1, C0, C2) VALUES (1930517724, '-1873841975', 1984284174);
+INSERT INTO T76 (C0) VALUES ('o');
+INSERT INTO T76 (C0) VALUES ('x	\qc?');
+INSERT INTO T76 (C0) VALUES ('{?');
+INSERT INTO T0 (C1, C2, C0) VALUES (-1436133983, -1177422209, '0.026945584292701996');
+UPDATE T0 SET C2=819922497;
+INSERT INTO T0 (C2) VALUES (1674351668);
+INSERT INTO T76 (C0) VALUES ('NQ?t');
+INSERT INTO T76 (C0) VALUES ('??vC?U-g?');
+UPDATE T0 SET C0='', C1=365488769, C2=1557625408;
+UPDATE T0 SET C2=938674232, C1=-1504772444, C0='&A';
+UPDATE T0 SET C2=2078290349, C1=-1171573650;
+-- SELECT DISTINCT T76.C0 FROM T76 WHERE (((NOT (((NOT ((((true) IS TRUE)) IS TRUE)))AND((NOT (('Fyb')LIKE('')))))))AND((NOT (((NOT (('')!=('-95075419'))))AND((NOT ((((T76.C0)NOT LIKE(T76.C0))) IS FALSE)))))));
+-- cardinality: 16
+-- true;((((true) IS TRUE)) IS TRUE);((((NULL) IS NULL)) IS NOT UNKNOWN);true;(('N''')>('205741713'));(('j')>(''));(('')!=('-95075419'));(('Fyb')LIKE(''));((((T76.C0)NOT LIKE(T76.C0))) IS FALSE);((((0.6512456155985753) IS NOT NULL)) IS FALSE);
+-- cardinality: 17
