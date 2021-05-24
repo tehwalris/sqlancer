@@ -3,7 +3,9 @@ package sqlancer.firebird.test;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,9 +38,9 @@ public class FirebirdPredicateCombiningBase
     FirebirdSchema s;
     FirebirdTables targetTables;
     FirebirdExpressionGenerator gen;
-    List<FirebirdKnownPredicate> knownPredicates;
+    Map<List<Boolean>, List<FirebirdKnownPredicate>> knownPredicates;
+    List<List<Boolean>> evaluationPatterns;
     FirebirdSelect select;
-    int numColumns;
     int maxPredicateDepth;
 
     public FirebirdPredicateCombiningBase(FirebirdGlobalState state) {
@@ -59,7 +61,7 @@ public class FirebirdPredicateCombiningBase
         gen = new FirebirdExpressionGenerator(state, 1).setColumns(targetTables.getColumns());
         gen.setLogicInPredicates(false);
         List<Node<FirebirdExpression>> fetchColumns = generateFetchColumns();
-        initializeInternalTables(state.getDmbsSpecificOptions().numOraclePredicates, numColumns);
+        initializeInternalTables(state.getDmbsSpecificOptions().numOraclePredicates, fetchColumns.size());
         List<TableReferenceNode<FirebirdExpression, FirebirdTable>> tableList = targetTables.getTables().stream()
                 .map(t -> new TableReferenceNode<FirebirdExpression, FirebirdTable>(t)).collect(Collectors.toList());
         List<Node<FirebirdExpression>> joins = FirebirdJoin.getJoins(tableList, state);
@@ -69,29 +71,33 @@ public class FirebirdPredicateCombiningBase
         List<Node<FirebirdExpression>> allColumns = Stream.concat(fetchColumns.stream(), predicates.stream())
                 .collect(Collectors.toList());
         select.setFetchColumns(allColumns);
-        generateTables(FirebirdToStringVisitor.asString(select), numColumns,
+        generateTables(FirebirdToStringVisitor.asString(select), fetchColumns.size(),
                 state.getDmbsSpecificOptions().numOraclePredicates);
 
-        knownPredicates = new ArrayList<>();
+        knownPredicates = new HashMap<>();
+        evaluationPatterns = new ArrayList<>();
         for (int i = 0; i < predicates.size(); i++) {
-            knownPredicates.add(new FirebirdKnownPredicate(predicates.get(i), predicateEvaluations.get(i)));
+            if (!knownPredicates.containsKey(predicateEvaluations.get(i))) {
+            	knownPredicates.put(predicateEvaluations.get(i), new ArrayList<>());
+            }
+            FirebirdKnownPredicate predicate = new FirebirdKnownPredicate(predicates.get(i), predicateEvaluations.get(i));
+            knownPredicates.get(predicateEvaluations.get(i)).add(predicate);
         }
+        evaluationPatterns.addAll(knownPredicates.keySet());
 
         select.setFetchColumns(fetchColumns);
     }
-
+    
     List<Node<FirebirdExpression>> generateFetchColumns() {
         List<Node<FirebirdExpression>> columns = new ArrayList<>();
         if (Randomly.getBoolean()) {
             columns = targetTables.getColumns().stream()
                     .map(c -> new ColumnReferenceNode<FirebirdExpression, FirebirdColumn>(c))
                     .collect(Collectors.toList());
-            numColumns = targetTables.getColumns().size();
         } else {
             columns = Randomly.nonEmptySubset(targetTables.getColumns()).stream()
                     .map(c -> new ColumnReferenceNode<FirebirdExpression, FirebirdColumn>(c))
                     .collect(Collectors.toList());
-            numColumns = columns.size();
         }
         return columns;
     }
@@ -107,7 +113,8 @@ public class FirebirdPredicateCombiningBase
 
     private FirebirdKnownPredicate internalPredicateCombination(int depth) {
         if (Randomly.getBooleanWithRatherLowProbability() || depth >= maxPredicateDepth) {
-            return Randomly.fromList(knownPredicates);
+        	List<Boolean> pattern = Randomly.fromList(evaluationPatterns);
+        	return Randomly.fromList(knownPredicates.get(pattern));
         } else {
             FirebirdKnownPredicate leftPredicate = internalPredicateCombination(depth + 1);
             FirebirdKnownPredicate rightPredicate = internalPredicateCombination(depth + 1);

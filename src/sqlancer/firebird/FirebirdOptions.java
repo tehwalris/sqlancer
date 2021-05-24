@@ -51,7 +51,7 @@ public class FirebirdOptions implements DBMSSpecificOptions<FirebirdOracleFactor
     public int maxNumViews = 1;
 
     @Parameter(names = "--num-oracle-predicates", description = "The number of predicates used in the predicate combining oracle", arity = 1)
-    public int numOraclePredicates = 10;
+    public int numOraclePredicates = 30;
 
     @Parameter(names = "--max-predicate-combinations", description = "The maximum number of combination operators used in the predicate combining oracle", arity = 1)
     public int maxPredicateCombinations = 2;
