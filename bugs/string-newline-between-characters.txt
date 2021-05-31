@@ -1,28 +1,49 @@
 SQL> CREATE TABLE t0(c0 VARCHAR(100));
-SQL> INSERT INTO T0 (C0) VALUES ('8
-CON> J');
+SQL> INSERT INTO T0 (C0) VALUES ('a
+CON> b');
 SQL> COMMIT;
+SQL> SET EXPLAIN;
 SQL> CREATE UNIQUE INDEX i52 ON T0(C0);
-
-
-
-
-SQL> SELECT T0.C0 FROM T0 WHERE (('8')>(T0.C0));
+SQL> SELECT T0.C0 FROM T0 WHERE (('a')>(T0.C0));
 
 Select Expression
     -> Filter
         -> Table "T0" Access By ID
             -> Bitmap
                 -> Index "I52" Range Scan (upper bound: 1/1)
-
-
-
-
-SQL> SELECT (('8')>(T0.C0)) FROM T0;
+SQL> SELECT (('a')>(T0.C0)) FROM T0;
 
 Select Expression
     -> Table "T0" Full Scan
 
+        
+======= 
+<true>  
 
-=======
-<true>
+
+
+
+
+-- Using a space instead of a newline makes this behave differently
+SQL> commit;
+SQL> drop table t0;
+SQL> CREATE TABLE t0(c0 VARCHAR(100));
+SQL> INSERT INTO T0 (C0) VALUES ('a b');
+SQL> COMMIT;
+SQL> SET EXPLAIN;
+SQL> CREATE UNIQUE INDEX i52 ON T0(C0);
+SQL> SELECT T0.C0 FROM T0 WHERE (('a')>(T0.C0));
+
+Select Expression
+    -> Filter
+        -> Table "T0" Access By ID
+            -> Bitmap
+                -> Index "I52" Range Scan (upper bound: 1/1)
+SQL> SELECT (('a')>(T0.C0)) FROM T0;
+
+Select Expression
+    -> Table "T0" Full Scan
+
+        
+======= 
+<false> 
